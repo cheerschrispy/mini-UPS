@@ -1,0 +1,32 @@
+{% extends "users/base.html" %}
+{% block content %}
+
+     <fieldset class="form-group">
+         <legend class="border-bottom md-4"> Your Own Packages</legend>
+     </fieldset>
+    
+     <fieldset>       
+       <table border="2" width="100%" align = "center">
+   <tr>
+    <td width="10%" align = "center">Package Name</td>
+    <td width="30%" align = "center">Order Number</td>
+    <td width="30%" align = "center">Position X</td>
+      <td width="20%" align = "center">Position Y</td>
+      <td width="10%" align = "center">Status</td>
+       
+   </tr>
+   Package Information
+     {% for posts in unposts %}<tr>
+        
+      <td width="10%" align = "center">{{ posts.name }}</td>
+      <td width="30%" align = "center">{{ posts.trackingNum }}</td>
+      <td width="30%" align = "center">{{ posts.X }}</td>
+    <td width="20%" align = "center">{{ posts.Y }}</td>
+      <td width="10%" align = "center">{{ posts.status }}</td>
+  
+    
+    </tr>
+    {%endfor%}  
+       </table>
+     </fieldset>
+{% endblock content %}
