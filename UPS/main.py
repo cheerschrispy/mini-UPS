@@ -21,10 +21,10 @@ def recvMsg(socket, msgType):
         if new_pos != 0:
             break
     whole_message = socket.recv(msg_len)
-    if msgType == "UConnect":
+    if msgType == "UConnected":
         msg = wu.UConnected()
         msg.ParseFromString(whole_message)
-    elif msgType == "UCommands":
+    elif msgType == "UResponses":
         msg = wu.UResponses()
         msg.ParseFromString(whole_message)
     else:
@@ -45,7 +45,7 @@ def createWorld(socket):
     msgUW.isAmazon = False
     
     sendMsg(socket, msgUW);    
-    msg = recvMsg(socket, "UConnect")
+    msg = recvMsg(socket, "UConnected")
     if msg.result == "connected!":
         print("New World %d is created!" % msg.worldid)
     else:
@@ -60,7 +60,7 @@ def connectWorld(socket, worldid):
     msgUW.worldid = worldid
     
     sendMsg(socket, msgUW)    
-    msg = recvMsg(socket, "UConnect")
+    msg = recvMsg(socket, "UConnected")
     if msg.result == "connected!":
         print("Connect to World %d!" % msg.worldid)
     else:
@@ -74,7 +74,7 @@ def disconnectWorld(socket, worldid):
     msgUW.disconnect = True
 
     sendMsg(socket, msgUW)
-    msg = recvMsg(socket, "UCommands")
+    msg = recvMsg(socket, "UResponses")
     if msg.finished == True:
         print("Disconnect with World %d!" % worldid)
     else:
@@ -90,8 +90,8 @@ if __name__ == '__main__':
     socW = buildSocW(HOST, PORT)
     
     msg1 = createWorld(socW)
-    
+    print(msg1.worldid)
     msg2 = disconnectWorld(socW, msg1.worldid)
 
-    #msg3 = connectWorld(socW, msg1.worldid)
+    msg3 = connectWorld(socW, msg1.worldid)
     socW.close()
