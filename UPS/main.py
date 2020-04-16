@@ -43,7 +43,12 @@ def buildSocW(hostW, portW):
 def createWorld(socket):
     msgUW = wu.UConnect()
     msgUW.isAmazon = False
-    
+    for i in range(100):
+        truck = msgUW.trucks.add()
+        truck.id = i
+        truck.x = 100
+        truck.y = 100
+        
     sendMsg(socket, msgUW);    
     msg = recvMsg(socket, "UConnected")
     if msg.result == "connected!":
