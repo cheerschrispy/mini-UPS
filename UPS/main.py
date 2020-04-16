@@ -12,7 +12,7 @@ def sendMsg(socket, msg):
     socket.send(msgstr)
     
 # receive a message by socket
-def recvMsg(socket):
+def recvMsg(socket, msgType):
     var_int_buff = []
     while True:
         buf = socket.recv(1)
@@ -21,9 +21,16 @@ def recvMsg(socket):
         if new_pos != 0:
             break
     whole_message = socket.recv(msg_len)
-    msg = wu.UConnected()
-    msg.ParseFromString(whole_message)
-    return msg.result, msg.worldid
+    if msgType == "UConnect":
+        msg = wu.UConnected()
+        msg.ParseFromString(whole_message)
+    elif msgType == "UCommands":
+        msg = wu.UResponses()
+        msg.ParseFromString(whole_message)
+    else:
+        print("Receive an undefined message.")
+        return
+    return msg
 
 # build a socket with World
 def buildSocW(hostW, portW):
@@ -38,13 +45,13 @@ def createWorld(socket):
     msgUW.isAmazon = False
     
     sendMsg(socket, msgUW);    
-    result, worldid = recvMsg(socket)
-    if result == "connected!":
-        print("New World %d is created!" % worldid)
+    msg = recvMsg(socket, "UConnect")
+    if msg.result == "connected!":
+        print("New World %d is created!" % msg.worldid)
     else:
-        print("Fail to create a new World, %s" % result)
+        print("Fail to create a new World, %s" % msg.result)
 
-    return result, worldid
+    return msg
 
 # connect to a World
 def connectWorld(socket, worldid):
@@ -52,14 +59,29 @@ def connectWorld(socket, worldid):
     msgUW.isAmazon = False
     msgUW.worldid = worldid
     
-    sendMsg(socket, msgUW);    
-    result = recvMsg(socket)
-    if result == "connected!":
-        print("Connect to World %d!" % worldid)
+    sendMsg(socket, msgUW)    
+    msg = recvMsg(socket, "UConnect")
+    if msg.result == "connected!":
+        print("Connect to World %d!" % msg.worldid)
     else:
-        print("Connection to World %d fails, %s" % (worldid, result))
+        print("Connection to World %d fails, %s" % (msg.worldid, msg.result))
 
-    return result
+    return msg
+
+# disconnect with a World
+def disconnectWorld(socket, worldid):
+    msgUW = wu.UCommands()
+    msgUW.disconnect = True
+
+    sendMsg(socket, msgUW)
+    msg = recvMsg(socket, "UCommands")
+    if msg.finished == True:
+        print("Disconnect with World %d!" % worldid)
+    else:
+        print("Disconnection with World %d fails." % worldid)
+
+    return msg
+
 
 # main
 if __name__ == '__main__':
@@ -67,8 +89,9 @@ if __name__ == '__main__':
     PORT = 12345
     socW = buildSocW(HOST, PORT)
     
-    res, worldid = createWorld(socW)
+    msg1 = createWorld(socW)
+    
+    msg2 = disconnectWorld(socW, msg1.worldid)
 
-    res = connectWorld(socW, worldid)
-        
+    #msg3 = connectWorld(socW, msg1.worldid)
     socW.close()
