@@ -2,6 +2,7 @@ import socket
 
 # google protobuf
 import world_ups_pb2 as wu
+import UtoA_pb2 as ua
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 
@@ -77,7 +78,7 @@ def connectWorld(socket, worldid):
 def disconnectWorld(socket, worldid):
     msgUW = wu.UCommands()
     msgUW.disconnect = True
-
+    
     sendMsg(socket, msgUW)
     msg = recvMsg(socket, "UResponses")
     if msg.finished == True:
@@ -96,7 +97,7 @@ if __name__ == '__main__':
     
     msg1 = createWorld(socW)
     print(msg1.worldid)
-    msg2 = disconnectWorld(socW, msg1.worldid)
+    #msg2 = disconnectWorld(socW, msg1.worldid)
 
-    msg3 = connectWorld(socW, msg1.worldid)
+    #msg3 = connectWorld(socW, msg1.worldid)
     socW.close()

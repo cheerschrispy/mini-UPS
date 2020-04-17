@@ -3,6 +3,11 @@ syntax = "proto2";
 /////////////////////////////////////////
 /// UtoA_1: ask what's inside in a package
 /////////////////////////////////////////
+message AProduct{
+  required int64 id = 1;
+  required string description = 2;
+  required int32 count = 3;
+}
 message UPackageQuery {
     required int64 packageid = 1;
     required int64 seqnum = 2;
