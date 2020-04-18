@@ -109,12 +109,18 @@ def sendWorldid(socket, worldid):
 # receive UResponses from World
 # send UtoACommands to Amazon
 # receive AtoUResponses from Amazon
-#def sendUtoA(socW, socA, msg):
+def sendUtoA(socW, socA, msg):
+    print('Receive UResponses from World...')
+
+    global seqnumW
+    global seqnumA
+    
+    for c in msg.completions:
+        msgUW = wu.UCommands()
+        msgUA = ua.UtoACommands()
 
 
-
-
-
+    for d in msg.deliveries:
 
 
 
