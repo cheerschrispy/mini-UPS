@@ -4,7 +4,7 @@ import socket
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 import world_ups_pb2 as wu
-#import UtoA_pb2 as ua
+import UtoA_pb2 as ua
 
 #######################################
 #sequence number
@@ -93,7 +93,7 @@ def disconnectWorld(socket, worldid):
         print("Disconnection with World %d fails." % worldid)
 
     return msg
-'''
+
 # send worldid to Amazon
 def sendWorldid(socket, worldid):
     global seqnumA
@@ -104,7 +104,7 @@ def sendWorldid(socket, worldid):
     msgUA = ua.UtoACommands()
     msgUA.connectWorld = conW
     sendMsg(socket, msgUA)
-'''
+
 ####################################
 # receive UResponses from World
 # send UtoACommands to Amazon

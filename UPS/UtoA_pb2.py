@@ -18,7 +18,6 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto2',
   serialized_options=None,
-  create_key=_descriptor._internal_create_key,
   serialized_pb=b'\n\nUtoA.proto\":\n\x08\x41Product\x12\n\n\x02id\x18\x01 \x02(\x03\x12\x13\n\x0b\x64\x65scription\x18\x02 \x02(\t\x12\r\n\x05\x63ount\x18\x03 \x02(\x05\"C\n\rUPackageQuery\x12\x11\n\tpackageid\x18\x01 \x02(\x03\x12\x0e\n\x06seqnum\x18\x02 \x02(\x03\x12\x0f\n\x07worldid\x18\x03 \x02(\x03\"N\n\x0e\x41PackageDetail\x12\x11\n\tpackageid\x18\x01 \x02(\x03\x12\x19\n\x06things\x18\x02 \x03(\x0b\x32\t.AProduct\x12\x0e\n\x06seqnum\x18\x03 \x02(\x03\"\x1d\n\x0bUDisconnect\x12\x0e\n\x06seqnum\x18\x01 \x02(\x03\"3\n\x10UDisconnectWorld\x12\x0f\n\x07worldid\x18\x01 \x03(\x03\x12\x0e\n\x06seqnum\x18\x02 \x02(\x03\"0\n\rUConnectWorld\x12\x0f\n\x07worldid\x18\x01 \x03(\x03\x12\x0e\n\x06seqnum\x18\x02 \x02(\x03\"_\n\x14UAccountPackageQuery\x12\x12\n\naAccountid\x18\x01 \x02(\x03\x12\x12\n\nuAccountid\x18\x02 \x02(\x03\x12\x0f\n\x07worldid\x18\x03 \x02(\x03\x12\x0e\n\x06seqnum\x18\x04 \x02(\x03\"K\n\x15\x41\x41\x63\x63ountPackageDetail\x12\x11\n\tpackageid\x18\x01 \x03(\x03\x12\x0f\n\x07worldid\x18\x02 \x02(\x03\x12\x0e\n\x06seqnum\x18\x03 \x02(\x03\"]\n\x12UDisconnectAccount\x12\x12\n\naAccountid\x18\x01 \x03(\x03\x12\x12\n\nuAccountid\x18\x02 \x02(\x03\x12\x0f\n\x07worldid\x18\x03 \x02(\x03\x12\x0e\n\x06seqnum\x18\x04 \x02(\x03\"\\\n\x12UDisconnectPackage\x12\x11\n\tpackageid\x18\x01 \x03(\x03\x12\x12\n\nuAccountid\x18\x02 \x02(\x03\x12\x0f\n\x07worldid\x18\x03 \x02(\x03\x12\x0e\n\x06seqnum\x18\x04 \x02(\x03\"\xc3\x02\n\x0cUtoACommands\x12&\n\x0epackageQueries\x18\x01 \x03(\x0b\x32\x0e.UPackageQuery\x12 \n\ndisconnect\x18\x02 \x01(\x0b\x32\x0c.UDisconnect\x12*\n\x0f\x64isconnectWorld\x18\x03 \x01(\x0b\x32\x11.UDisconnectWorld\x12$\n\x0c\x63onnectWorld\x18\x04 \x01(\x0b\x32\x0e.UConnectWorld\x12\x35\n\x16uAccountPackageQueries\x18\x05 \x03(\x0b\x32\x15.UAccountPackageQuery\x12/\n\x12\x64isconnectAccounts\x18\x06 \x03(\x0b\x32\x13.UDisconnectAccount\x12/\n\x12\x64isconnectPackages\x18\x07 \x03(\x0b\x32\x13.UDisconnectPackage\"~\n\rAtoUResponses\x12\x0c\n\x04\x61\x63ks\x18\x01 \x03(\x03\x12\'\n\x0epackageDetails\x18\x02 \x03(\x0b\x32\x0f.APackageDetail\x12\x36\n\x16\x61\x41\x63\x63ountPackageDetails\x18\x03 \x03(\x0b\x32\x16.AAccountPackageDetail'
 )
 
@@ -31,7 +30,6 @@ _APRODUCT = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='id', full_name='AProduct.id', index=0,
@@ -39,21 +37,21 @@ _APRODUCT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='description', full_name='AProduct.description', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='count', full_name='AProduct.count', index=2,
       number=3, type=5, cpp_type=1, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -77,7 +75,6 @@ _UPACKAGEQUERY = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='packageid', full_name='UPackageQuery.packageid', index=0,
@@ -85,21 +82,21 @@ _UPACKAGEQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UPackageQuery.seqnum', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='worldid', full_name='UPackageQuery.worldid', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -123,7 +120,6 @@ _APACKAGEDETAIL = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='packageid', full_name='APackageDetail.packageid', index=0,
@@ -131,21 +127,21 @@ _APACKAGEDETAIL = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='things', full_name='APackageDetail.things', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='APackageDetail.seqnum', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -169,7 +165,6 @@ _UDISCONNECT = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UDisconnect.seqnum', index=0,
@@ -177,7 +172,7 @@ _UDISCONNECT = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -201,7 +196,6 @@ _UDISCONNECTWORLD = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='worldid', full_name='UDisconnectWorld.worldid', index=0,
@@ -209,14 +203,14 @@ _UDISCONNECTWORLD = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UDisconnectWorld.seqnum', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -240,7 +234,6 @@ _UCONNECTWORLD = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='worldid', full_name='UConnectWorld.worldid', index=0,
@@ -248,14 +241,14 @@ _UCONNECTWORLD = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UConnectWorld.seqnum', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -279,7 +272,6 @@ _UACCOUNTPACKAGEQUERY = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='aAccountid', full_name='UAccountPackageQuery.aAccountid', index=0,
@@ -287,28 +279,28 @@ _UACCOUNTPACKAGEQUERY = _descriptor.Descriptor(
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='uAccountid', full_name='UAccountPackageQuery.uAccountid', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='worldid', full_name='UAccountPackageQuery.worldid', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UAccountPackageQuery.seqnum', index=3,
       number=4, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -332,7 +324,6 @@ _AACCOUNTPACKAGEDETAIL = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='packageid', full_name='AAccountPackageDetail.packageid', index=0,
@@ -340,21 +331,21 @@ _AACCOUNTPACKAGEDETAIL = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='worldid', full_name='AAccountPackageDetail.worldid', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='AAccountPackageDetail.seqnum', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -378,7 +369,6 @@ _UDISCONNECTACCOUNT = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='aAccountid', full_name='UDisconnectAccount.aAccountid', index=0,
@@ -386,28 +376,28 @@ _UDISCONNECTACCOUNT = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='uAccountid', full_name='UDisconnectAccount.uAccountid', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='worldid', full_name='UDisconnectAccount.worldid', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UDisconnectAccount.seqnum', index=3,
       number=4, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -431,7 +421,6 @@ _UDISCONNECTPACKAGE = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='packageid', full_name='UDisconnectPackage.packageid', index=0,
@@ -439,28 +428,28 @@ _UDISCONNECTPACKAGE = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='uAccountid', full_name='UDisconnectPackage.uAccountid', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='worldid', full_name='UDisconnectPackage.worldid', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='seqnum', full_name='UDisconnectPackage.seqnum', index=3,
       number=4, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -484,7 +473,6 @@ _UTOACOMMANDS = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='packageQueries', full_name='UtoACommands.packageQueries', index=0,
@@ -492,49 +480,49 @@ _UTOACOMMANDS = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='disconnect', full_name='UtoACommands.disconnect', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='disconnectWorld', full_name='UtoACommands.disconnectWorld', index=2,
       number=3, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='connectWorld', full_name='UtoACommands.connectWorld', index=3,
       number=4, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='uAccountPackageQueries', full_name='UtoACommands.uAccountPackageQueries', index=4,
       number=5, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='disconnectAccounts', full_name='UtoACommands.disconnectAccounts', index=5,
       number=6, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='disconnectPackages', full_name='UtoACommands.disconnectPackages', index=6,
       number=7, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -558,7 +546,6 @@ _ATOURESPONSES = _descriptor.Descriptor(
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
-  create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
       name='acks', full_name='AtoUResponses.acks', index=0,
@@ -566,21 +553,21 @@ _ATOURESPONSES = _descriptor.Descriptor(
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='packageDetails', full_name='AtoUResponses.packageDetails', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
       name='aAccountPackageDetails', full_name='AtoUResponses.aAccountPackageDetails', index=2,
       number=3, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],

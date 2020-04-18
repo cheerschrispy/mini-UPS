@@ -4,7 +4,7 @@ from tools import *
 
 # google protobuf
 import world_ups_pb2 as wu
-#import UtoA_pb2 as ua
+import UtoA_pb2 as ua
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 
