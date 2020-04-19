@@ -115,7 +115,7 @@ def sendWorldid(socket, worldid):
 # receive UResponses from World
 # reply with acks
 # send UtoACommands to Amazon
-# receive AtoUResponses from Amazon
+# receive acks from Amazon
 def sendUtoA(socW, socA, msg):
     print('Receive UResponses from World...')
 
@@ -125,6 +125,9 @@ def sendUtoA(socW, socA, msg):
     msgUW = wu.UCommands()
     bool UtoA = False
     msgUA = ua.UtoAResponses()
+
+    for ack in msg.acks:
+        print("UCommands[%d] is acked by the World" % ack)
     
     for c in msg.completions:
         # reply to World with acks
@@ -145,8 +148,8 @@ def sendUtoA(socW, socA, msg):
 
     sendMsg(socW, msgUW)
     if UtoA:
-        sendMsg(socA, msgUA)
-    
+        sendMsg(socA, msgUA)                
+        
     return None
 
 
