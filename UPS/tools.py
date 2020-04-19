@@ -202,6 +202,15 @@ def getTruckprocess(socW, socA):
         goPick.seqnum=seqnumW
         seqnumW+=1
     sendMsg(socW,msgUW)
+    #receive the ACK from world
+    msgACK=recvMsg(socW,"UResponses")
+    if(seqnumW+1==msgACK.acks_size):
+        print("received correct ACK")
+    else:
+        print("ACK has ",msgACK.acks_size," ,seqNum is ",seqnumW)
+
+    
+
     
 
 
