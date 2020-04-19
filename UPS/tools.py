@@ -98,12 +98,11 @@ def disconnectWorld(socket, worldid):
 # send worldid to Amazon
 def sendWorldid(socket, worldid):
     global seqnumA
-    conW = ua.UConnectWorld
-    conW.worldid = worldid
-    conW.seqnum = seqnumA
-    seqnumA += 1
     msgUA = ua.UtoACommands()
-    msgUA.connectWorld = conW
+    msgUA.connectWorld.seqnum = seqnumA
+    seqnumA += 1
+    msgUA.connectWorld.worldid.append(worldid)
+        
     sendMsg(socket, msgUA)
 
 ####################################

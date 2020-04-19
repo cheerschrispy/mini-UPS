@@ -20,14 +20,14 @@ if __name__ == '__main__':
     socW = buildSoc(hostW, portW)
 
     # connect to Amazon server
-    '''
-    hostA = 'vcm-xxxxx.vm.duke.edu'
+    
+    hostA = 'vcm-12360.vm.duke.edu'
     portA = 34567
     socA =  buildSoc(hostA, portA)
-    '''
+    
 
     # create a World and send worldid to Amazon
     msg1 = createWorld(socW)
-    #sendWorldid(socA, msg1.worldid)
+    sendWorldid(socA, msg1.worldid)
     
     socW.close()
