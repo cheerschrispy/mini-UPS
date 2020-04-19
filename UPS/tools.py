@@ -117,18 +117,30 @@ def sendUtoA(socW, socA, msg):
     global seqnumA
 
     msgUW = wu.UCommands()
-    msgUA = ua.UtoACommands()
+    bool UtoA = False
+    msgUA = ua.UtoAResponses()
     
     for c in msg.completions:
         # reply to World with acks
         msgUW.acks.append(msg.seqnum)
+
+        # send UtoACommands to Amazon
+        # if the truck status is 'arrive warehouse'
+        if c.status == 'arrive warehouse':
+            UtoA = True
+            truckReady = msgUA.truckReadies.add()
+            truckReady.truckid = c.truckid
+            truckReady.seqnum = seqnumA
+            seqnumA += 1
 
     for d in msg.delivered:
         # reply to World with acks
         msgUW.acks.append(msg.seqnum)
 
     sendMsg(socW, msgUW)
-        
+    if UtoA:
+        sendMsg(socA, msgUA)
+    
     return None
 
 
