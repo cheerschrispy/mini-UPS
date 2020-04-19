@@ -35,6 +35,12 @@ def recvMsg(socket, msgType):
     elif msgType == "UResponses":
         msg = wu.UResponses()
         msg.ParseFromString(whole_message)
+    elif msgType=="AtoUCommands":
+        msg = au.AtoUCommands()
+        msg.ParseFromString(whole_message)
+    elif msgType=="AtoUResponses":
+        msg = ua.AtoUResponses()
+        msg.ParseFromString(whole_message)
     else:
         print("Receive an undefined message.")
         return
@@ -57,7 +63,7 @@ def createWorld(socket):
         truck.x = 100
         truck.y = 100
 
-    sendMsg(socket, msgUW);
+    sendMsg(socket, msgUW)
     msg = recvMsg(socket, "UConnected")
     if msg.result == "connected!":
         print("New World %d is created!" % msg.worldid)
