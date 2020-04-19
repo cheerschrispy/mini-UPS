@@ -111,6 +111,27 @@ def sendWorldid(socket, worldid):
         
     sendMsg(socket, msgUA)
 
+
+
+
+###### May used in mutithread ######
+#send back ACK to Amazon
+def sendAckToAmazon(socketToAmazon,seqnum):
+    msgUA=ua.UtoACommands()
+    #use deep copy,covered instead of appended
+    msgUA.ack[:]=seqnum
+    sendMsg(socketToAmazon,msgUA)
+
+#send back ACK to World
+def sendAckToWorld(socketToWorld,seqnum):
+    msgUW=wu.UCommands()
+    #use deep copy,covered instead of appended
+    msgUW.ack[:]=seqnum
+    sendMsg(socketToWorld,msgUW)
+
+
+
+
 ####################################
 # receive UResponses from World
 # reply with acks
@@ -121,14 +142,15 @@ def sendUtoA(socW, socA, msg):
 
     global seqnumW
     global seqnumA
-
+    #the message responsesing ACK
+    msgUA = au.UtoAResponses()
     msgUW = wu.UCommands()
-    bool UtoA = False
-    msgUA = ua.UtoAResponses()
+
+    UtoA = False
     
     for c in msg.completions:
         # reply to World with acks
-        msgUW.acks.append(msg.seqnum)
+        msgUW.acks.append(c.seqnum)
 
         # send UtoACommands to Amazon
         # if the truck status is 'arrive warehouse'
@@ -139,26 +161,49 @@ def sendUtoA(socW, socA, msg):
             truckReady.seqnum = seqnumA
             seqnumA += 1
 
+        #else if c.status="idle"
+        #when all the packages are delivered 
+
     for d in msg.delivered:
         # reply to World with acks
-        msgUW.acks.append(msg.seqnum)
+        msgUW.acks.append(d.seqnum)
 
     sendMsg(socW, msgUW)
+
+
     if UtoA:
         sendMsg(socA, msgUA)
     
     return None
 
-
-
-
-
-
-
-
-
 #####################################
 # receive AtoUCommands from Amazon
-# send UtoAResponses to Amazon
+# return ACK
+# send UtoAResponses to Amazon to send truck 
 # send UCommands to World
 #def sendUtoW(socW, socA, msg):
+
+def getTruckprocess(socW, socA):
+    global seqnumW
+    
+    #receive the AtoUcommands:getTruck
+    msg=recvMsg(socA,"AtoUCommands")
+    #reply it with ACK
+    msgUA=au.AtoUResponses()
+    for truckCommand in msg.getTrucks:
+        msgUA.acks.append(truckCommand.seqnum)
+    sendMsg(socA,msgUA)
+    #tell the world getTruck
+    msgUW = wu.UCommands()
+    for truckCommand in msg.getTrucks:
+        goPick=msgUW.pickups.add()
+        goPick.truckid=truckCommand.truckid
+        goPick.whid=truckCommand.whid
+        goPick.seqnum=seqnumW
+        seqnumW+=1
+    sendMsg(socW,msgUW)
+    
+
+
+
+

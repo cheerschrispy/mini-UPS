@@ -173,11 +173,11 @@ message AtoUCommands {
 // UPS's responses
 message UtoAResponses {
     repeated int64 acks = 1;
-    optional UInitialWorldid initialWorldid = 2;                                    // reply 1
-    repeated UTruckReady truckReadies = 3;                                          // reply 2   
-    optional UWorldidSummaryReply worldidSummaryReply = 4;                          // reply 6
-    optional UMadeWorld madeWorld = 5;                                              // reply 8
-    repeated UAccountConnectionResult accountconnectionresult = 6;                  // reply 9
-    repeated UOrderConnectionResult orderconnectionresult = 7;                      // reply 10
-    repeated UPackageCoord packageCoords = 8;                                       // reply 13  
+    optional UInitialWorldid initialWorldid = 2;                                    // reply 2
+    repeated UTruckReady truckReadies = 3;                                          // reply 3   
+    optional UWorldidSummaryReply worldidSummaryReply = 4;                          // reply 7
+    optional UMadeWorld madeWorld = 5;                                              // reply 9
+    repeated UAccountConnectionResult accountconnectionresult = 6;                  // reply 10
+    repeated UOrderConnectionResult orderconnectionresult = 7;                      // reply 11
+    repeated UPackageCoord packageCoords = 8;                                       // reply 14  
 }
