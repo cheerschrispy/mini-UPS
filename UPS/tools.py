@@ -4,6 +4,7 @@ import socket
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 import world_ups_pb2 as wu
+import AtoU_pb2 as au
 import UtoA_pb2 as ua
 
 #######################################
@@ -121,7 +122,10 @@ def sendUtoA(socW, socA, msg):
 
 
     for d in msg.deliveries:
+        msgUW = wu.UCommands()
+        msgUA = ua.UtoACommands()
 
+    return None
 
 
 
