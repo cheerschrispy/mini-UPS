@@ -1,11 +1,12 @@
 import socket
 
+from database import *
+
 # google protobuf
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 import world_ups_pb2 as wu
-import AtoU_pb2 as au
-import UtoA_pb2 as ua
+import ups_amazon_pb2 as ua
 
 #######################################
 #sequence number
@@ -29,17 +30,15 @@ def recvMsg(socket, msgType):
         if new_pos != 0:
             break
     whole_message = socket.recv(msg_len)
+    
     if msgType == "UConnected":
         msg = wu.UConnected()
         msg.ParseFromString(whole_message)
     elif msgType == "UResponses":
         msg = wu.UResponses()
         msg.ParseFromString(whole_message)
-    elif msgType=="AtoUCommands":
+    elif msgType=="AMessages":
         msg = au.AtoUCommands()
-        msg.ParseFromString(whole_message)
-    elif msgType=="AtoUResponses":
-        msg = ua.AtoUResponses()
         msg.ParseFromString(whole_message)
     else:
         print("Receive an undefined message.")
@@ -142,7 +141,7 @@ def sendUtoA(socW, socA, msg):
     global seqnumW
     global seqnumA
     
-    msgUA = au.UtoAResponses()
+    msgUA = ua.UMessages()
     msgUW = wu.UCommands()
 
     for ack in msg.acks:
