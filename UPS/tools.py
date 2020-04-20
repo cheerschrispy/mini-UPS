@@ -139,7 +139,6 @@ def sendAckToWorld(socketToWorld,seqnum):
 def UtoA(socW, socA, msg):
     print('Receive UResponses from World...')
 
-    global seqnumW
     global seqnumA
     
     msgUA = ua.UMessages()
@@ -168,8 +167,6 @@ def UtoA(socW, socA, msg):
         msgUW.acks.append(d.seqnum)
 
     sendMsg(socW, msgUW)
-
-
     if UtoA:
         sendMsg(socA, msgUA)
     
@@ -183,58 +180,69 @@ def UtoA(socW, socA, msg):
 #def sendUtoW(socW, socA, msg):
 
 def AtoU(socW, socA):
+    print("Receive Amessages from Amazon...")
+
     global seqnumW
-    #receive the AtoUcommands:getTruck
-    msg=recvMsg(socA,"AtoUCommands")
-    #reply it with ACK
-    msgUA=au.AtoUResponses()
+    
+    # receive the AtoUcommands:getTruck
+    msg = recvMsg(socA, "AMessages")
+    
+    # reply to Amazon with acks
+    msgUA = ua.Umessages()
     for truckCommand in msg.getTrucks:
         msgUA.acks.append(truckCommand.seqnum)
 
     for deliverCommand in msg.delivers:
         msgUA.acks.append(deliverCommand.seqnum)
-    sendMsg(socA,msgUA)
+
+    sendMsg(socA,msg UA)
 
     
     msgUW = wu.UCommands()
-    #tell the world getTruck
+    # inform World to assign trucks
     for truckCommand in msg.getTrucks:
-        goPick=msgUW.pickups.add()
-        goPick.truckid=truckCommand.truckid
-        goPick.whid=truckCommand.whid
-        goPick.seqnum=seqnumW
-        seqnumW+=1
+        goPick = msgUW.pickups.add()
+        ###########
+        # TODO assign an idle truck (from database?)
+        goPick.truckid = seqnumW + 1
+        ###########
+        goPick.whid = truckCommand.whid
+        goPick.seqnum = seqnumW
+        seqnumW += 1
     
-    #tell the world go deliver
+    # inform World to deliver
     for deliverCommand in msg.delivers:
-        goDeliver=msgUW.delivers.add()
-        #generate a subtype UDeliveryLocation
-        '''Location=wu.UDeliveryLocation()
+        goDeliver = msgUW.delivers.add()
+
+        goDeliver.truckid = deliverCommand.truckid
+        goDeliver.seqnum = seqnumW
+        seqnumW += 1
         
-        Location.packageid=deliverCommand.packageid
-        Location.x=deliverCommand.x
-        Location.y=deliverCommand.y
+        # generate a subtype UDeliveryLocation
+        '''Location = wu.UDeliveryLocation()
+        
+        Location.packageid = deliverCommand.packageid
+        Location.x = deliverCommand.x
+        Location.y = deliverCommand.y
         #add it ????????
-        Location=goDeliver.packages.add()
+        Location = goDeliver.packages.add()
 '''     
         for location in deliverCommand.packages:
-            currLocation=goDeliver.packages.add()
-            currLocation.x=location.x
-            currLocation.y=location.y
-            currLocation.packageid=location.packageid
-        goDeliver.truckid=deliverCommand.truckid
-        goDeliver.seqnum=seqnumW
-        seqnumW+=1
+            currLocation = goDeliver.packages.add()
+            currLocation.x = location.x
+            currLocation.y = location.y
+            currLocation.packageid = location.packageid
+        
 
     sendMsg(socW,msgUW)
 
 
     #receive the ACK from world
-    msgACK=recvMsg(socW,"UResponses")
-    #if(seqnumW+1==msgACK.acks_size):
+    msgACK = recvMsg(socW,"UResponses")
+    #if(seqnumW+1 == msgACK.acks_size):
     #    print("received correct ACK")
     #else:
-    print("ACK has ",msgACK.acks_size," ,seqNum is ",seqnumW)
+    print("ACK has ", msgACK.acks_size, " ,seqNum is ", seqnumW)
 
     
 
