@@ -116,18 +116,18 @@ def sendWorldid(socket, worldid):
 
 ###### May used in mutithread ######
 #send back ACK to Amazon
-def sendAckToAmazon(socketToAmazon,seqnum):
-    msgUA=ua.UtoACommands()
+def sendAckToAmazon(socketToAmazon, seqnum):
+    msgUA = ua.UtoACommands()
     #use deep copy,covered instead of appended
-    msgUA.ack[:]=seqnum
-    sendMsg(socketToAmazon,msgUA)
+    msgUA.ack[:] = seqnum
+    sendMsg(socketToAmazon, msgUA)
 
 #send back ACK to World
-def sendAckToWorld(socketToWorld,seqnum):
-    msgUW=wu.UCommands()
+def sendAckToWorld(socketToWorld, seqnum):
+    msgUW = wu.UCommands()
     #use deep copy,covered instead of appended
-    msgUW.ack[:]=seqnum
-    sendMsg(socketToWorld,msgUW)
+    msgUW.ack[:] = seqnum
+    sendMsg(socketToWorld, msgUW)
 
 
 
@@ -136,18 +136,19 @@ def sendAckToWorld(socketToWorld,seqnum):
 # receive UResponses from World
 # reply with acks
 # send UtoACommands to Amazon
-# receive AtoUResponses from Amazon
 def sendUtoA(socW, socA, msg):
     print('Receive UResponses from World...')
 
     global seqnumW
     global seqnumA
-    #the message responsesing ACK
+    
     msgUA = au.UtoAResponses()
     msgUW = wu.UCommands()
 
+    for ack in msg.acks:
+        print("UCommands[%d] is acked by the World" % ack)
+
     UtoA = False
-    
     for c in msg.completions:
         # reply to World with acks
         msgUW.acks.append(c.seqnum)
@@ -161,7 +162,7 @@ def sendUtoA(socW, socA, msg):
             truckReady.seqnum = seqnumA
             seqnumA += 1
 
-        #else if c.status="idle"
+        #elif c.status = "idle"
         #when all the packages are delivered 
 
     for d in msg.delivered:
@@ -169,12 +170,8 @@ def sendUtoA(socW, socA, msg):
         msgUW.acks.append(d.seqnum)
 
     sendMsg(socW, msgUW)
-
-
     if UtoA:
         sendMsg(socA, msgUA)
-    
-    return None
 
 #####################################
 # receive AtoUCommands from Amazon
@@ -183,7 +180,8 @@ def sendUtoA(socW, socA, msg):
 # send UCommands to World
 #def sendUtoW(socW, socA, msg):
 
-def AtoU(socW, socA):
+<<<<<<< HEAD
+def getTruckprocess(socW, socA):
     global seqnumW
     #receive the AtoUcommands:getTruck
     msg=recvMsg(socA,"AtoUCommands")
@@ -197,35 +195,30 @@ def AtoU(socW, socA):
     sendMsg(socA,msgUA)
 
     
+=======
+def getTruckprocess(socW, socA):
+    
+    global seqnumW
+    
+    # receive the AtoUcommands:getTruck
+    msg = recvMsg(socA, "AtoUCommands")
+    # reply it with ACK
+    msgUA = au.AtoUResponses()
+    for truckCommand in msg.getTrucks:
+        msgUA.acks.append(truckCommand.seqnum)
+
+    sendMsg(socA, msgUA)
+
+    #tell the world getTruck
+>>>>>>> 91df3f54773d50c173b48a16b26e5989b64301f7
     msgUW = wu.UCommands()
     #tell the world getTruck
     for truckCommand in msg.getTrucks:
-        goPick=msgUW.pickups.add()
-        goPick.truckid=truckCommand.truckid
-        goPick.whid=truckCommand.whid
-        goPick.seqnum=seqnumW
-        seqnumW+=1
-    
-    #tell the world go deliver
-    for deliverCommand in msg.delivers:
-        goDeliver=msgUW.delivers.add()
-        #generate a subtype UDeliveryLocation
-        '''Location=wu.UDeliveryLocation()
-        
-        Location.packageid=deliverCommand.packageid
-        Location.x=deliverCommand.x
-        Location.y=deliverCommand.y
-        #add it ????????
-        Location=goDeliver.packages.add()
-'''     
-        for location in deliverCommand.packages:
-            currLocation=goDeliver.packages.add()
-            currLocation.x=location.x
-            currLocation.y=location.y
-            currLocation.packageid=location.packageid
-        goDeliver.truckid=deliverCommand.truckid
-        goDeliver.seqnum=seqnumW
-        seqnumW+=1
+        goPick = msgUW.pickups.add()
+        goPick.truckid = truckCommand.truckid
+        goPick.whid = truckCommand.whid
+        goPick.seqnum = seqnumW
+        seqnumW += 1
 
     sendMsg(socW,msgUW)
 
