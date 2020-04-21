@@ -11,8 +11,19 @@ from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 
 ################################################
+def recvWorld(socW, socA):
+    while True:
+        msg = recvMsg(socW, "UResponses")
+        t = threading.Thread(target = UtoA, args = (socW, socA, msg))
+        t.start()
 
-####################################
+def recvAamzon(socW, socA, worldid):
+    while True:
+        msg = recvMsg(socA, "AMessages")
+        t = threading.Thread(target = AtoU, args = (socW, socA, msg, worldid))
+        t.start()
+        
+###############################################
 # main
 if __name__ == '__main__':
     # connect to World server
@@ -28,7 +39,9 @@ if __name__ == '__main__':
     portA = 34567
     socA =  buildSoc(hostA, portA)
     
-    #send worldid to Amazon
-    sendWorldid(socA, msg1.worldid)
+    threadW = threading.Thread(target = recvWorld, args = (socW, socA))
+    threadA = threading.Thread(target = recvAmazon, args = (socW, socA, msg1.worldid))
+    threadW.start()
+    threadA.start()
     
     socW.close()
