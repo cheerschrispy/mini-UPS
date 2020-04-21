@@ -1,23 +1,23 @@
 import psycopg2
 cursor
 def connectDB():
-    conn = psycopg2.connect(database = 'cugnezod', user = 'cugnezod', password = 'WY3VYXBCtpI3WhLKNbL_tP1xcW1UGmya', host = 'drona.db.elephantsql.com', port = '5432')
-    return conn
+    db = psycopg2.connect(database = 'cugnezod', user = 'cugnezod', password = 'WY3VYXBCtpI3WhLKNbL_tP1xcW1UGmya', host = 'drona.db.elephantsql.com', port = '5432')
+    return db
     
-def addTruck(conn, i):
-    cursor = conn.cursor()
+def addTruck(db, i):
+    cursor = db.cursor()
     sql = "INSERT INTO trucks VALUES (%s, 'idle');"
     cursor.execute(sql, i)
-    conn.commit()
+    db.commit()
 
-def updateTruckStatus(conn, truckid, status):
+def updateTruckStatus(db, truckid, status):
     cursor = conn.cursor()
     sql = "UPDATE trucks SET status = %s WHERE truckid = %s;"
     cursor.execute(sql, (status, truckid))
-    conn.commit()
+    db.commit()
     
-def findIdleTruck(conn):
-    cursor = conn.cursor()
+def findIdleTruck(db):
+    cursor = db.cursor()
     sql = "SELECT FROM trucks WHERE status = 'idle';"
     cursor.execute(sql)
     res = cursor.fetchall()

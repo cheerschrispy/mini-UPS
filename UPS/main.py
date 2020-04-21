@@ -28,6 +28,9 @@ def recvAmazon(socW, socA, worldid):
 ###############################################
 # main
 if __name__ == '__main__':
+    # connect to database
+    db = connectDB()
+
     # connect to World server
     hostW = '0.0.0.0'
     portW = 12345

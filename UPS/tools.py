@@ -61,7 +61,7 @@ def buildSoc(host, port):
 def createWorld(socket):
     msgUW = wu.UConnect()
     msgUW.isAmazon = False
-    for i in range(100):
+    for i in range(1000):
         truck = msgUW.trucks.add()
         truck.id = i
         truck.x = 100
@@ -141,7 +141,7 @@ def sendAckToWorld(socketToWorld,seqnum):
 # reply with acks
 # send UMessages to Amazon
 ##Thread: World->Ups->Amazon:Once recv the msg from 
-def UtoA(socW, socA, msg):
+def UtoA(socW, socA, db, msg):
     print('Receive UResponses from World...')
 
     global seqnumA
@@ -190,7 +190,7 @@ def UtoA(socW, socA, msg):
 # receive AMessages from Amazon
 # reply with acks 
 # send UCommands to World
-def AtoU(socW, socA, worldid, msg):
+def AtoU(socW, socA, db, worldid, msg):
     print("Receive Amessages from Amazon...")
 
     global seqnumW
