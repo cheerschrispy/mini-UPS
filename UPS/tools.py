@@ -141,41 +141,44 @@ def sendAckToWorld(socketToWorld,seqnum):
 # reply with acks
 # send UMessages to Amazon
 ##Thread: World->Ups->Amazon:Once recv the msg from 
-def UtoA(socW, socA,msg):
+def UtoA(socW, socA, msg):
     print('Receive UResponses from World...')
 
     global seqnumA
 
-    # receive message from World
-    # TODO listen
-    
+    # receive acks from World
+    for ack in msg.acks:
+        print("the ack from world is ",ack)
+
     msgUA = ua.UMessages()
     msgUW = wu.UCommands()
+    sendUtoW = False
+    sendUtoA = False
     
-    UtoA = False
+    # receive UFinished from World
     for c in msg.completions:
+        sendUtoW = True
         # reply to World with acks
         msgUW.acks.append(c.seqnum)
 
         # send UtoACommands to Amazon
         # if the truck status is 'arrive warehouse'
         if c.status == 'arrive warehouse':
-            UtoA = True
+            sendUtoA = True
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
             truckReady.seqnum = seqnumA
             seqnumA += 1 
 
+    # receive UDeliveryMade from World
     for d in msg.delivered:
+        sendUtoW = True
         # reply to World with acks
         msgUW.acks.append(d.seqnum)
 
-    #TODO:also recv the ack from world (after each time sending msg to world)
-    for ack in msg.acks:
-        print("the ack from world is ",ack)
-
-    sendMsg(socW, msgUW)
-    if UtoA:
+    if sendUtoW:
+        sendMsg(socW, msgUW)
+    if sendUtoA:
         sendMsg(socA, msgUA)
     
     return None
@@ -184,38 +187,44 @@ def UtoA(socW, socA,msg):
 # receive AMessages from Amazon
 # reply with acks 
 # send UCommands to World
-def AtoU(socW, socA, worldid,msg):
+def AtoU(socW, socA, worldid, msg):
     print("Receive Amessages from Amazon...")
 
     global seqnumW
-    # receive the AtoUcommands:getTruck
-    msg = recvMsg(socA, "AMessages")
-    msgUA = ua.Umessages()
+    global seqnumA
 
-    if msg.has_initialWorldid():
-        # TODO:but syntax not too sure next line
-        worldIDResp=msgUA.initialWorldid
-
-        worldIDResp.worldid=worldid
-        worldIDResp.seqnum=seqnumW
-        seqnumW+=1
-        
-    #TODO:also recv the ack from amazon (after each time sending msg to amazon)
+    # receive acks from Amazon
     for ack in msg.acks:
         print("the ack from amazon is ",ack)
 
+    # prepare UMessages to Amazon
+    msgUA = ua.UMessages()
+    sendUtoA False
+    
+    # receive AInitialWorld from Amazon
+    if msg.has_initialWorldid():
+        sendUtoA = True
+        msgUA.initialWorldid.worldid = worldid
+        msgUA.initialWorldid.seqnum = seqnumA
+        seqnumA += 1
+        
     # reply to Amazon with acks
     for truckCommand in msg.getTrucks:
+        sendUtoA = True
         msgUA.acks.append(truckCommand.seqnum)
 
     for deliverCommand in msg.delivers:
+        sendUtoA = True
         msgUA.acks.append(deliverCommand.seqnum)
 
-    sendMsg(socA,msgUA)
+    if sendUtoA:
+        sendMsg(socA, msgUA)
 
-    
+    # prepare UCommands to World
     msgUW = wu.UCommands()
-    # inform World to assign trucks
+    sendUtoW = False
+    
+    # receive AGetTruck from Amazon
     for truckCommand in msg.getTrucks:
         goPick = msgUW.pickups.add()
         ###########
@@ -226,7 +235,7 @@ def AtoU(socW, socA, worldid,msg):
         goPick.seqnum = seqnumW
         seqnumW += 1
     
-    # inform World to deliver
+    # receive ADeliver from Amazon
     for deliverCommand in msg.delivers:
         goDeliver = msgUW.deliveries.add()
 
@@ -235,15 +244,14 @@ def AtoU(socW, socA, worldid,msg):
         seqnumW += 1
         
         # generate a subtype UDeliveryLocation
-        # TODO update
         for location in deliverCommand.location:
             currLocation = goDeliver.packages.add()
             currLocation.x = location.x
             currLocation.y = location.y
             currLocation.packageid = location.packageid
-        
-    
-    sendMsg(socW,msgUW)
+
+    if sendUtoW:
+        sendMsg(socW, msgUW)
     
 
     
