@@ -16,12 +16,14 @@ def recvWorld(socW, socA):
         msg = recvMsg(socW, "UResponses")
         t = threading.Thread(target = UtoA, args = (socW, socA, msg))
         t.start()
+        t.join()
 
 def recvAamzon(socW, socA, worldid):
     while True:
         msg = recvMsg(socA, "AMessages")
         t = threading.Thread(target = AtoU, args = (socW, socA, msg, worldid))
         t.start()
+        t.join()
         
 ###############################################
 # main
@@ -43,5 +45,7 @@ if __name__ == '__main__':
     threadA = threading.Thread(target = recvAmazon, args = (socW, socA, msg1.worldid))
     threadW.start()
     threadA.start()
+    threadW.join()
+    threadA.join()
     
     socW.close()
