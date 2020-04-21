@@ -134,18 +134,21 @@ def sendAckToWorld(socketToWorld,seqnum):
 ####################################
 # receive UResponses from World
 # reply with acks
-# send UtoACommands to Amazon
-# receive AtoUResponses from Amazon
-def UtoA(socW, socA, msg):
+# send UMessages to Amazon
+def UtoA(socW, socA):
     print('Receive UResponses from World...')
 
     global seqnumA
+
+    # receive message from World
+    # TODO listen
     
     msgUA = ua.UMessages()
     msgUW = wu.UCommands()
 
-    UtoA = False
+    # TODO acks
     
+    UtoA = False
     for c in msg.completions:
         # reply to World with acks
         msgUW.acks.append(c.seqnum)
@@ -157,10 +160,7 @@ def UtoA(socW, socA, msg):
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
             truckReady.seqnum = seqnumA
-            seqnumA += 1
-
-        #else if c.status="idle"
-        #when all the packages are delivered 
+            seqnumA += 1 
 
     for d in msg.delivered:
         # reply to World with acks
@@ -173,20 +173,22 @@ def UtoA(socW, socA, msg):
     return None
 
 #####################################
-# receive AtoUCommands from Amazon
-# return ACK
-# send UtoAResponses to Amazon to send truck 
+# receive AMessages from Amazon
+# reply with acks 
 # send UCommands to World
-#def sendUtoW(socW, socA, msg):
-
-def AtoU(socW, socA):
+def AtoU(socW, socA, worldid):
     print("Receive Amessages from Amazon...")
 
     global seqnumW
     
     # receive the AtoUcommands:getTruck
     msg = recvMsg(socA, "AMessages")
-    
+
+    if msg.has_initialWorldid():
+        # TODO
+
+    # TODO acks
+        
     # reply to Amazon with acks
     msgUA = ua.Umessages()
     for truckCommand in msg.getTrucks:
@@ -226,7 +228,7 @@ def AtoU(socW, socA):
         Location.y = deliverCommand.y
         #add it ????????
         Location = goDeliver.packages.add()
-'''     
+'''     # TODO update
         for location in deliverCommand.packages:
             currLocation = goDeliver.packages.add()
             currLocation.x = location.x
@@ -236,7 +238,7 @@ def AtoU(socW, socA):
 
     sendMsg(socW,msgUW)
 
-
+    # TODO (move)
     #receive the ACK from world
     msgACK = recvMsg(socW,"UResponses")
     #if(seqnumW+1 == msgACK.acks_size):
@@ -247,7 +249,6 @@ def AtoU(socW, socA):
     
 
     
-
 
 
 
