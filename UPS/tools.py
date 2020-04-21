@@ -13,6 +13,11 @@ import ups_amazon_pb2 as ua
 seqnumW = 0
 seqnumA = 0
 
+#use list to deal with the ACK
+ackOfWorld=[]
+worldAckStatus=[]
+ackOfAmazon=[]
+amazonAckStatus=[]
 
 # send a message by socket
 def sendMsg(socket, msg):
@@ -38,7 +43,7 @@ def recvMsg(socket, msgType):
         msg = wu.UResponses()
         msg.ParseFromString(whole_message)
     elif msgType=="AMessages":
-        msg = au.AtoUCommands()
+        msg = ua.AMessages()
         msg.ParseFromString(whole_message)
     else:
         print("Receive an undefined message.")
@@ -135,7 +140,8 @@ def sendAckToWorld(socketToWorld,seqnum):
 # receive UResponses from World
 # reply with acks
 # send UMessages to Amazon
-def UtoA(socW, socA):
+##Thread: World->Ups->Amazon:Once recv the msg from 
+def UtoA(socW, socA,msg):
     print('Receive UResponses from World...')
 
     global seqnumA
@@ -145,8 +151,6 @@ def UtoA(socW, socA):
     
     msgUA = ua.UMessages()
     msgUW = wu.UCommands()
-
-    # TODO acks
     
     UtoA = False
     for c in msg.completions:
@@ -166,6 +170,10 @@ def UtoA(socW, socA):
         # reply to World with acks
         msgUW.acks.append(d.seqnum)
 
+    #TODO:also recv the ack from world (after each time sending msg to world)
+    for ack in msg.acks:
+        print("the ack from world is ",ack)
+
     sendMsg(socW, msgUW)
     if UtoA:
         sendMsg(socA, msgUA)
@@ -176,28 +184,34 @@ def UtoA(socW, socA):
 # receive AMessages from Amazon
 # reply with acks 
 # send UCommands to World
-def AtoU(socW, socA, worldid):
+def AtoU(socW, socA, worldid,msg):
     print("Receive Amessages from Amazon...")
 
     global seqnumW
-    
     # receive the AtoUcommands:getTruck
     msg = recvMsg(socA, "AMessages")
+    msgUA = ua.Umessages()
 
     if msg.has_initialWorldid():
-        # TODO
+        # TODO:but syntax not too sure next line
+        worldIDResp=msgUA.initialWorldid
 
-    # TODO acks
+        worldIDResp.worldid=worldid
+        worldIDResp.seqnum=seqnumW
+        seqnumW+=1
         
+    #TODO:also recv the ack from amazon (after each time sending msg to amazon)
+    for ack in msg.acks:
+        print("the ack from amazon is ",ack)
+
     # reply to Amazon with acks
-    msgUA = ua.Umessages()
     for truckCommand in msg.getTrucks:
         msgUA.acks.append(truckCommand.seqnum)
 
     for deliverCommand in msg.delivers:
         msgUA.acks.append(deliverCommand.seqnum)
 
-    sendMsg(socA,msg UA)
+    sendMsg(socA,msgUA)
 
     
     msgUW = wu.UCommands()
@@ -214,38 +228,22 @@ def AtoU(socW, socA, worldid):
     
     # inform World to deliver
     for deliverCommand in msg.delivers:
-        goDeliver = msgUW.delivers.add()
+        goDeliver = msgUW.deliveries.add()
 
         goDeliver.truckid = deliverCommand.truckid
         goDeliver.seqnum = seqnumW
         seqnumW += 1
         
         # generate a subtype UDeliveryLocation
-        '''Location = wu.UDeliveryLocation()
-        
-        Location.packageid = deliverCommand.packageid
-        Location.x = deliverCommand.x
-        Location.y = deliverCommand.y
-        #add it ????????
-        Location = goDeliver.packages.add()
-'''     # TODO update
-        for location in deliverCommand.packages:
+        # TODO update
+        for location in deliverCommand.location:
             currLocation = goDeliver.packages.add()
             currLocation.x = location.x
             currLocation.y = location.y
             currLocation.packageid = location.packageid
         
-
+    
     sendMsg(socW,msgUW)
-
-    # TODO (move)
-    #receive the ACK from world
-    msgACK = recvMsg(socW,"UResponses")
-    #if(seqnumW+1 == msgACK.acks_size):
-    #    print("received correct ACK")
-    #else:
-    print("ACK has ", msgACK.acks_size, " ,seqNum is ", seqnumW)
-
     
 
     

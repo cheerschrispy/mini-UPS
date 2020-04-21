@@ -18,10 +18,10 @@ def recvWorld(socW, socA):
         t.start()
         t.join()
 
-def recvAamzon(socW, socA, worldid):
+def recvAmazon(socW, socA, worldid):
     while True:
         msg = recvMsg(socA, "AMessages")
-        t = threading.Thread(target = AtoU, args = (socW, socA, msg, worldid))
+        t = threading.Thread(target = AtoU, args = (socW, socA,worldid,msg))
         t.start()
         t.join()
         
