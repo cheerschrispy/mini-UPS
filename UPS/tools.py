@@ -14,9 +14,9 @@ seqnumW = 0
 seqnumA = 0
 
 #use list to deal with the ACK
-ackOfWorld=[]
+acksOfWorld=[]
 worldAckStatus=[]
-ackOfAmazon=[]
+acksOfAmazon=[]
 amazonAckStatus=[]
 
 # send a message by socket
@@ -181,7 +181,6 @@ def UtoA(socW, socA, msg):
     if sendUtoA:
         sendMsg(socA, msgUA)
     
-    return None
 
 #####################################
 # receive AMessages from Amazon
@@ -226,6 +225,7 @@ def AtoU(socW, socA, worldid, msg):
     
     # receive AGetTruck from Amazon
     for truckCommand in msg.getTrucks:
+        sendUtoW = True
         goPick = msgUW.pickups.add()
         ###########
         # TODO assign an idle truck (from database?)
@@ -237,6 +237,7 @@ def AtoU(socW, socA, worldid, msg):
     
     # receive ADeliver from Amazon
     for deliverCommand in msg.delivers:
+        sendUtoW = True
         goDeliver = msgUW.deliveries.add()
 
         goDeliver.truckid = deliverCommand.truckid
