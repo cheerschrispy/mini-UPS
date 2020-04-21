@@ -167,6 +167,10 @@ def UtoA(socW, socA, msg):
             sendUtoA = True
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
+            ############
+            # TODO
+            truckReady.whid = 0
+            ############
             truckReady.seqnum = seqnumA
             seqnumA += 1 
 
