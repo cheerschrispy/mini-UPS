@@ -131,9 +131,6 @@ def sendAckToWorld(socketToWorld,seqnum):
     msgUW.ack[:]=seqnum
     sendMsg(socketToWorld,msgUW)
 
-
-
-
 ####################################
 # receive UResponses from World
 # reply with acks
@@ -165,12 +162,10 @@ def UtoA(socW, socA, db, msg):
             sendUtoA = True
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
+            # get whid from database
+            truckReady.whid = getWhid(db, c.truckid)
             # update truck status to "arrive warehouse"
             updateTruckStatus(db, c.truckid, "arrive warehouse")
-            #######
-            # TODO
-            truckReady.whid = 0
-            #######
             truckReady.seqnum = seqnumA
             seqnumA += 1 
 
@@ -239,9 +234,9 @@ def AtoU(socW, socA, db, worldid, msg):
         sendUtoW = True
         goPick = msgUW.pickups.add()
         goPick.truckid = findIdleTruck(db)
-        # update truck status to "travelling"
-        updateTruckStatus(db, gpPick.truckid, "travelling")
         goPick.whid = truckCommand.whid
+        # update truck status to "travelling"
+        updateTruckStatus(db, gpPick.truckid, "travelling", goPickup.whid)
         goPick.seqnum = seqnumW
         seqnumW += 1
     
