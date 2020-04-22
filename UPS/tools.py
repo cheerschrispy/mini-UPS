@@ -166,7 +166,7 @@ def UtoA(socW, socA, db, msg):
             # get whid from database
             #TODO: want packageID??
             truckReady.whid = getWhid(db, c.truckid)
-            
+
             # update truck status to "arrive warehouse"
             updateTruckStatus(db, c.truckid, "arrive warehouse")
             truckReady.seqnum = seqnumA
@@ -280,6 +280,9 @@ def AtoU(socW, socA, db, worldid, msg):
                 currLocation.x = location.x
                 currLocation.y = location.y
                 currLocation.packageid = location.packageid
+            ############### Packages Database ###############
+            pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)
+            updatePackageStatus(db,"out for deliver",pckid)
             
     sendMsg(socW, msgUW)
     ############### Packages Database ###############
