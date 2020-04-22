@@ -4,16 +4,16 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 class package(models.Model):
-	name = models.CharField(max_length=100)
+	#name = models.CharField(max_length=100)
 	trackingnum = models.CharField(max_length=100)
 	#ownername=models.CharField(max_length=100)
-	owner = models.ForeignKey(User, on_delete=models.CASCADE)
-	whid = models.IntegerField(verbose_name="get picked from")
+	owner = models.CharField(max_length=100,verbose_name="owner name")
+	whid = models.IntegerField(verbose_name="get picked from which wharehouse")
 	detail = models.CharField(max_length=300)
 	x = models.IntegerField()
 	y = models.IntegerField()
 	status = models.CharField(max_length=300)
-	#packing,packed,loading,loaded,delivering,delivered
+	#created,truck enroute to wharehouse,packing,out for deliver
 
 	def __str__(self):
 		return self.name

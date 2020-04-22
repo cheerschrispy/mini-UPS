@@ -18,7 +18,7 @@ class trackingNumInputForm(forms.Form):
 class UpdatePackagesInfoForms(forms.Form):
 	#name  =forms.CharField(max_length=100)
 	#trackingNum = forms.CharField(max_length=100)
-	new_X = forms.CharField(max_length=100)
-	new_Y = forms.CharField(max_length=100)
+	new_X = forms.IntegerField()
+	new_Y = forms.IntegerField()
 
 

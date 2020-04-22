@@ -54,8 +54,8 @@ def trackPackage(request):
 @login_required
 def viewOwnOrder(request):
     context = {
-        'posts': package.objects.filter(Q(owner=request.user),Q(status="packing")|Q(status="packed")|Q(status="loading")|Q(status="loaded")) ,
-        'unposts': package.objects.filter(Q(owner=request.user),Q(status="delivering")|Q(status="delivered"))
+        'posts': package.objects.filter(Q(owner=request.user.username),Q(status="packing")|Q(status="packed")|Q(status="loading")|Q(status="loaded")) ,
+        'unposts': package.objects.filter(Q(owner=request.user.username),Q(status="delivering")|Q(status="delivered"))
     }
     return render(request, 'users/allPackages.html', context)
 
@@ -73,15 +73,13 @@ def updateInfo (request, package_id):
             
             #_trackingNum = p_form.cleaned_data.get("trackingNum")
             #_status= p_form.cleaned_data.get("des")
-            _X = p_form.cleaned_data.get("X")
-            _Y = p_form.cleaned_data.get("Y")
+            _X = p_form.cleaned_data.get("new_X")
+            _Y = p_form.cleaned_data.get("new_Y")
 
             #current.name = _name
             #current.trackingNum = _trackingNum
             current.x = _X
             current.y = _Y
-
-
             current.save()
             messages.success(request, f'Your account has been updated!')
             return redirect('viewOwnOrder')

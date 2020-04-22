@@ -31,8 +31,8 @@ def findIdleTruck(db):
 
 def getWhid(db, truckid):
     cursor = db.cursor()
-    sql = "SELECT whid FROM users_truck WHERE truckid = %s;"
-    cursor.execute(sql, truckid)
+    sql = "SELECT whid FROM users_truck WHERE id = %s;"
+    cursor.execute(sql, [truckid])
     res = cursor.fetchall()
     if res:
         return res[0]
@@ -42,11 +42,34 @@ def getWhid(db, truckid):
     
 ######## package ##########
 
-def addPackage(db,description,pckid,status,whid,ownerName):
+def addPackage(db,detail,pckid,whid,ownerName,x,y):
     cursor=db.cursor()
-    sql="INSERT INTO users_package VALUES ();"
-    cursor.execute()
+    sql="INSERT INTO users_package(trackingnum,owner,whid,detail,x,y,status) VALUES(%s,%s,%s,%s,%s,%s,'created');"
+    cursor.execute(sql,(pckid,ownerName,whid,detail,x,y))
     db.commit()
+
+def updatePackageStatus(db,status,packageid):
+    cursor=db.cursor()
+    sql="UPDATES users_package SET status=%s WHERE trackingnum=%s;"
+    cursor.execute(sql,(status,packageid))
+    db.commit()
+#update x,y location is done by user in front-end
+
+def getPackageIDFromTruckid(db,truckid):
+    cursor = db.cursor()
+    whid=getWhid(db,truckid)
+    #get current on-way package id
+    sql = "SELECT trackingnum FROM users_package WHERE whid = %s AND status!='out for deliver' AND status!='delivered';"
+    cursor.execute(sql,[whid])
+    res = cursor.fetchall()
+    if res:
+        return res[0]
+    else:
+        print("Cannot get the correct pacakgeid!")
+        return -1
+
+
+
 
 
 
