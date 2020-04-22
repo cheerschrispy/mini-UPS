@@ -1,5 +1,5 @@
 import psycopg2
-cursor
+
 def connectDB():
     db = psycopg2.connect(database = 'cugnezod', user = 'cugnezod', password = 'WY3VYXBCtpI3WhLKNbL_tP1xcW1UGmya', host = 'drona.db.elephantsql.com', port = '5432')
     return db

@@ -66,7 +66,8 @@ def createWorld(socket):
         truck.id = i
         truck.x = 100
         truck.y = 100
-
+        addTruck(db, i)
+        
     sendMsg(socket, msgUW)
     msg = recvMsg(socket, "UConnected")
     if msg.result == "connected!":
@@ -148,7 +149,7 @@ def UtoA(socW, socA, db, msg):
 
     # receive acks from World
     for ack in msg.acks:
-        print("the ack from world is ",ack)
+        print("The ack from World is ", ack)
 
     msgUA = ua.UMessages()
     msgUW = wu.UCommands()
@@ -167,10 +168,12 @@ def UtoA(socW, socA, db, msg):
             sendUtoA = True
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
-            ############
+            # update truck status to "arrive warehouse"
+            updateTruckStatus(db, c.truckid, "arrive warehouse")
+            #######
             # TODO
             truckReady.whid = 0
-            ############
+            #######
             truckReady.seqnum = seqnumA
             seqnumA += 1 
 
@@ -179,6 +182,9 @@ def UtoA(socW, socA, db, msg):
         sendUtoW = True
         # reply to World with acks
         msgUW.acks.append(d.seqnum)
+        # update truck status to "idle"
+        updateTruckStatus(db, d.truckid, "idle")
+            
 
     if sendUtoW:
         sendMsg(socW, msgUW)
@@ -198,7 +204,7 @@ def AtoU(socW, socA, db, worldid, msg):
 
     # receive acks from Amazon
     for ack in msg.acks:
-        print("the ack from amazon is ",ack)
+        print("The ack from Amazon is ", ack)
 
     # prepare UMessages to Amazon
     msgUA = ua.UMessages()
@@ -231,10 +237,9 @@ def AtoU(socW, socA, db, worldid, msg):
     for truckCommand in msg.getTrucks:
         sendUtoW = True
         goPick = msgUW.pickups.add()
-        ###########
-        # TODO assign an idle truck (from database?)
-        goPick.truckid = seqnumW + 1
-        ###########
+        goPick.truckid = findIdleTruck(db)
+        # update truck status to "travelling"
+        updateTruckStatus(db, gpPick.truckid, "travelling")
         goPick.whid = truckCommand.whid
         goPick.seqnum = seqnumW
         seqnumW += 1
@@ -243,8 +248,9 @@ def AtoU(socW, socA, db, worldid, msg):
     for deliverCommand in msg.delivers:
         sendUtoW = True
         goDeliver = msgUW.deliveries.add()
-
         goDeliver.truckid = deliverCommand.truckid
+        # update truck status to "delivering"
+        updateTruckStatus(db, goDeliver.truckid, "delivering")
         goDeliver.seqnum = seqnumW
         seqnumW += 1
         
