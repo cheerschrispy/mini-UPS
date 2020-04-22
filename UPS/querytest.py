@@ -7,11 +7,13 @@ def connectDB():
 if __name__ == '__main__':
     conn=connectDB()
     cursor = conn.cursor()
-    sql = "SELECT * FROM users_package;"
+    sql = "SELECT username FROM auth_user;"
+    #sql = "UPDATE users_package SET x=1 WHERE name = 'qiaokeli';"   
     cursor.execute(sql)
     
     rows = cursor.fetchall()
     for row in rows:
         print ("ID = ", row[0])
-        print ("NAME = ", row[1])
+        #print ("NAME = ", row[1])
+    conn.commit()
     conn.close()

@@ -15,7 +15,7 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            userID=form.cleaned_data.get('userID')
+            #userID=form.cleaned_data.get('userID')
             messages.success(request, f'Your account has been created! You are now able to log in')
             return redirect('profile')
     else:
@@ -37,7 +37,7 @@ def trackPackage(request):
         if p_form.is_valid():
             trackingNum = p_form.cleaned_data.get("trackingNumber")
             print(trackingNum)
-            current = package.objects.filter(trackingNum = trackingNum )
+            current = package.objects.filter(trackingnum = trackingNum )
             context = {
         'unposts': current
 }      
@@ -54,8 +54,8 @@ def trackPackage(request):
 @login_required
 def viewOwnOrder(request):
     context = {
-        'posts': package.objects.filter(Q(owner=request.user),(Q(status=0)|Q(status=1))) ,
-        'unposts': package.objects.filter(Q(owner=request.user),status=2)
+        'posts': package.objects.filter(Q(owner=request.user),Q(status="packing")|Q(status="packed")|Q(status="loading")|Q(status="loaded")) ,
+        'unposts': package.objects.filter(Q(owner=request.user),Q(status="delivering")|Q(status="delivered"))
     }
     return render(request, 'users/allPackages.html', context)
 
@@ -69,17 +69,17 @@ def updateInfo (request, package_id):
             print(package_id)
             current = package.objects.get(id = package_id )
              
-            _name = p_form.cleaned_data.get("name")
+            #_name = p_form.cleaned_data.get("name")
             
-            _trackingNum = p_form.cleaned_data.get("trackingNum")
+            #_trackingNum = p_form.cleaned_data.get("trackingNum")
             #_status= p_form.cleaned_data.get("des")
             _X = p_form.cleaned_data.get("X")
             _Y = p_form.cleaned_data.get("Y")
 
-            current.name = _name
-            current.trackingNum = _trackingNum
-            current.X = _X
-            current.Y = _Y
+            #current.name = _name
+            #current.trackingNum = _trackingNum
+            current.x = _X
+            current.y = _Y
 
 
             current.save()
