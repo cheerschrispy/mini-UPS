@@ -25,7 +25,7 @@ def findIdleTruck(db):
     cursor.execute(sql)
     res = cursor.fetchall()
     if res:
-        return res[0]
+        return res
     else:
         return 0
 
@@ -35,7 +35,7 @@ def getWhid(db, truckid):
     cursor.execute(sql, [truckid])
     res = cursor.fetchall()
     if res:
-        return res[0]
+        return res[0][0]
     else:
         print("Cannot get the correct whid!")
         return -1
@@ -50,7 +50,7 @@ def addPackage(db,detail,pckid,whid,ownerName,x,y):
 
 def updatePackageStatus(db,status,packageid):
     cursor=db.cursor()
-    sql="UPDATES users_package SET status=%s WHERE trackingnum=%s;"
+    sql="UPDATE users_package SET status=%s WHERE trackingnum=%s;"
     cursor.execute(sql,(status,packageid))
     db.commit()
 #update x,y location is done by user in front-end
@@ -63,12 +63,24 @@ def getPackageIDFromTruckid(db,truckid):
     cursor.execute(sql,[whid])
     res = cursor.fetchall()
     if res:
-        return res[0]
+        for a in res:
+            print (a[0])
+        return res
     else:
         print("Cannot get the correct pacakgeid!")
         return -1
 
 
+##user##
+def validateUserName(db,name):
+    cursor = db.cursor()
+    sql = "SELECT * FROM auth_user WHERE username = %s ;"
+    cursor.execute(sql,name)
+    res = cursor.fetchall()
+    if res:
+        return True
+    else:
+        return False
 
 
 

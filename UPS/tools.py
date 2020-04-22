@@ -174,7 +174,8 @@ def UtoA(socW, socA, db, msg):
             ############### Packages Database ###############
             #update the current package status
             pckid=getPackageIDFromTruckid(db,c.truckid)
-            updatePackageStatus(db,"packing",pckid)
+            for p in pckid:
+                updatePackageStatus(db,"packing",pckid)
             
 
             
@@ -238,7 +239,7 @@ def AtoU(socW, socA, db, worldid, msg):
     msgUW = wu.UCommands()
     
     # receive AGetTruck from Amazon
-    if(msg.has_getTrucks()):
+    if msg.getTrucks().len()!=0:
         for truckCommand in msg.getTrucks:
             goPick = msgUW.pickups.add()
             goPick.truckid = findIdleTruck(db)
@@ -260,12 +261,13 @@ def AtoU(socW, socA, db, worldid, msg):
         ############### Packages Database ###############
         #TODO: if receive ACK from world.(gettruck),should change status to on-way
         pckid=getPackageIDFromTruckid(goPick.truckid)
-        updatePackageStatus(db,'truck enroute to wharehouse',pckid)
+        for p in pckid:
+            updatePackageStatus(db,'truck enroute to wharehouse',p[0])
 
 
     
     # receive ADeliver from Amazon
-    if(msg.has_delivers()):
+    if msg.has_delivers().len()!=0:
         for deliverCommand in msg.delivers:
             goDeliver = msgUW.deliveries.add()
             goDeliver.truckid = deliverCommand.truckid
@@ -282,7 +284,8 @@ def AtoU(socW, socA, db, worldid, msg):
                 currLocation.packageid = location.packageid
             ############### Packages Database ###############
             pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)
-            updatePackageStatus(db,"out for deliver",pckid)
+            for p in pckid:
+                updatePackageStatus(db,"out for deliver",p[0])
             
     sendMsg(socW, msgUW)
     ############### Packages Database ###############

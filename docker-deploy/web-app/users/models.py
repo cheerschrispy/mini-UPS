@@ -16,7 +16,7 @@ class package(models.Model):
 	#created,truck enroute to wharehouse,packing,out for deliver
 
 	def __str__(self):
-		return self.name
+		return self.trackingnum
 	#no need to have a return reverse url
 
 class truck(models.Model):
