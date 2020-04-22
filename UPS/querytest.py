@@ -7,7 +7,7 @@ def connectDB():
 if __name__ == '__main__':
     conn=connectDB()
     cursor = conn.cursor()
-    sql = "SELECT username FROM auth_user;"
+    sql = "SELECT * FROM users_package where id=1;"
     #sql = "UPDATE users_package SET x=1 WHERE name = 'qiaokeli';"   
     cursor.execute(sql)
     

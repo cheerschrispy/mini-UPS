@@ -116,9 +116,6 @@ def sendWorldid(socket, worldid):
         
     sendMsg(socket, msgUA)
 
-
-
-
 ###### May used in mutithread ######
 #send back ACK to Amazon
 def sendAckToAmazon(socketToAmazon,seqnum):
@@ -208,7 +205,7 @@ def AtoU(socW, socA, db, worldid, msg):
 
     # prepare UMessages to Amazon
     msgUA = ua.UMessages()
-    sendUtoA False
+    sendUtoA=False
     
     # receive AInitialWorld from Amazon
     if msg.has_initialWorldid():
@@ -221,6 +218,10 @@ def AtoU(socW, socA, db, worldid, msg):
     for truckCommand in msg.getTrucks:
         sendUtoA = True
         msgUA.acks.append(truckCommand.seqnum)
+        ############### DataBase ###############
+        #insert new entry in pakage
+        
+
 
     for deliverCommand in msg.delivers:
         sendUtoA = True
