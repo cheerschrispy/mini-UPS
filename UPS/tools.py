@@ -1,7 +1,6 @@
 import socket
-
 from database import *
-
+import threading
 # google protobuf
 from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
@@ -12,7 +11,7 @@ import ups_amazon_pb2 as ua
 #sequence number
 seqnumW = 0
 seqnumA = 0
-
+mutex = threading.Lock()
 #use list to deal with the ACK
 acksOfWorld=[]
 worldAckStatus=[]
@@ -58,7 +57,7 @@ def buildSoc(host, port):
     return s
 
 # create a new World
-def createWorld(socket):
+def createWorld(socket,db):
     msgUW = wu.UConnect()
     msgUW.isAmazon = False
     for i in range(1000):
@@ -167,7 +166,9 @@ def UtoA(socW, socA, db, msg):
             # update truck status to "arrive warehouse"
             updateTruckStatus(db, c.truckid, "arrive warehouse")
             truckReady.seqnum = seqnumA
-            seqnumA += 1 
+            mutex=threading.Lock()
+            with mutex:
+                seqnumA += 1 
             ############### Packages Database ###############
             #update the current package status
             pckid = getPackageIDFromTruckid(db, c.truckid)
@@ -215,7 +216,8 @@ def AtoU(socW, socA, db, worldid, msg):
         sendUtoA = True
         msgUA.initialWorldid.worldid = worldid
         msgUA.initialWorldid.seqnum = seqnumA
-        seqnumA += 1
+        with mutex:
+            seqnumA += 1
         
     # reply to Amazon with acks
     for truckCommand in msg.getTrucks:
@@ -243,7 +245,8 @@ def AtoU(socW, socA, db, worldid, msg):
             # update truck status to "travelling"
             updateTruckStatus(db, truckCommand.truckid, "travelling", truckCommand.whid)
             goPick.seqnum = seqnumW
-            seqnumW += 1
+            with mutex:
+                seqnumW += 1
             ############### Packages Database ###############
             #make details in each packages
             detail=""
@@ -269,7 +272,8 @@ def AtoU(socW, socA, db, worldid, msg):
             # update truck status to "delivering"
             updateTruckStatus(db, goDeliver.truckid, "delivering")
             goDeliver.seqnum = seqnumW
-            seqnumW += 1
+            with mutex:
+                seqnumW += 1
             
             # generate a subtype UDeliveryLocation
             for location in deliverCommand.location:
