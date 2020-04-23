@@ -254,7 +254,11 @@ def AtoU(socW, socA, db, worldid, msg):
                 info=product.count+" X "+product.description+" ,productID is "+product.productid+"\n"
                 detail+=info
             #insert new entry in pakage
-            addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y))
+            if(truckCommand.uAccountName.len()!=0):
+                ##TODO!!!!
+                addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y))
+            else:
+                addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y))
         sendMsg(socW, msgUW)
         ############### Packages Database ###############
         #TODO: if receive ACK from world.(gettruck),should change status to on-way
@@ -278,9 +282,13 @@ def AtoU(socW, socA, db, worldid, msg):
             # generate a subtype UDeliveryLocation
             for location in deliverCommand.location:
                 currLocation = goDeliver.packages.add()
-                currLocation.x = location.x
-                currLocation.y = location.y
+                ############### Packages Database ###############
+                #need to use x, y in database
                 currLocation.packageid = location.packageid
+                xy=getXY(db,currLocation.packageid)
+                currLocation.x=xy[0]
+                currLocation.y=xy[1]
+        
             ############### Packages Database ###############
             pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)
             for p in pckid:

@@ -70,6 +70,16 @@ def getPackageIDFromTruckid(db,truckid):
         print("Cannot get the correct pacakgeid!")
         return -1
 
+def getXY(db,packageid):
+    cursor = db.cursor()
+    sql = "SELECT x,y FROM users_package WHERE trackingnum=%s;"
+    cursor.execute(sql, [packageid])
+    res = cursor.fetchall()
+    if res:
+        return res[0]
+    else:
+        print("no such packageid")
+        return None
 
 ##user##
 def validateUserName(db, name):

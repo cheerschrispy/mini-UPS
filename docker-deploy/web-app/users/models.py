@@ -5,9 +5,9 @@ from django.urls import reverse
 
 class package(models.Model):
 	#name = models.CharField(max_length=100)
-	trackingnum = models.CharField(max_length=100)
+	trackingnum = models.IntegerField()
 	#ownername=models.CharField(max_length=100)
-	owner = models.CharField(max_length=100,verbose_name="owner name")
+	owner = models.CharField(max_length=100,verbose_name="owner name",blank=True)
 	whid = models.IntegerField(verbose_name="get picked from which wharehouse")
 	detail = models.CharField(max_length=300)
 	x = models.IntegerField()

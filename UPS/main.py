@@ -37,9 +37,9 @@ if __name__ == '__main__':
     socW = buildSoc(hostW, portW)
 
     # create a World
-    msg1 = createWorld(socW)
+    msg1 = createWorld(socW,db)
     
-    # connect to Amazon server
+    # connect to Amazon serve
     hostA = 'vcm-12360.vm.duke.edu'
     portA = 34567
     socA =  buildSoc(hostA, portA)

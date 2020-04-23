@@ -17,6 +17,7 @@ if __name__ == '__main__':
 
     print(validateUserName(db, 'admin1'))
 
+    print(getX(db,12345))
 
 
 
