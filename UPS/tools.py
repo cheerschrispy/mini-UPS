@@ -255,7 +255,15 @@ def AtoU(socW, socA, db, worldid, msg):
                 detail+=info
             #insert new entry in pakage
             if(truckCommand.uAccountName.len()!=0):
-                ##TODO!!!!
+                msgUA = AMessages()
+                msgUA.accountResult.packageid = truckCommand.packageid
+                msgUA.accountResult.uAccountExists = validateUserName(db, truckCommand.uAccountName)
+                msgUA.accountResult.uAccountName = truckCommand.uAccountName
+                msgUA.accountResult.uAccountid = truckCommand.uAccountid
+                msgUA.accountResult.seqnum = seqnumA
+                with mutex:
+                    seqnumA += 1
+                sendMsg(socA, msgUA)
                 addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y))
             else:
                 addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y))

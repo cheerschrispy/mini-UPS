@@ -225,7 +225,8 @@ message UMessages {
     //Basic Function
     repeated int64 acks = 1;
     optional UInitialWorldid initialWorldid = 2;
-    repeated UTruckReady truckReadies = 3;
+    optional UAccountResult accountResult = 3;
+    repeated UTruckReady truckReadies = 4;
     //Query
     repeated UAccountPackageQuery uAccountPackageQueries = 5;
     repeated UAccountConnectionResult accountconnectionresult = 6;   
