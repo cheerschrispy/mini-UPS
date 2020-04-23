@@ -25,7 +25,7 @@ message AmazonProduct{
 message AGetTruck {
     required int32 whid = 1;
     required int64 packageid = 2;
-    required string uAccountName = 3;
+    optional string uAccountName = 3;
     required int32 x = 4;
     required int32 y = 5;
     repeated AmazonProduct product = 6;
