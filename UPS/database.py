@@ -25,7 +25,7 @@ def findIdleTruck(db):
     cursor.execute(sql)
     res = cursor.fetchall()
     if res:
-        return res
+        return res[0][0]
     else:
         return 0
 
@@ -72,10 +72,10 @@ def getPackageIDFromTruckid(db,truckid):
 
 
 ##user##
-def validateUserName(db,name):
+def validateUserName(db, name):
     cursor = db.cursor()
-    sql = "SELECT * FROM auth_user WHERE username = %s ;"
-    cursor.execute(sql,name)
+    sql = "SELECT * FROM auth_user WHERE username=%s;"
+    cursor.execute(sql, (name,))
     res = cursor.fetchall()
     if res:
         return True

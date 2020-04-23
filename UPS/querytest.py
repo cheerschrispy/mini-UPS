@@ -15,7 +15,7 @@ if __name__ == '__main__':
     addPackage(db,"socks",123456,2,"zeyu",10,10)
     updatePackageStatus(db,"delivering","123456")
 
-    print(validateUserName(db,'admin'))
+    print(validateUserName(db, 'admin1'))
 
 
 

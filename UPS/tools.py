@@ -162,10 +162,7 @@ def UtoA(socW, socA, db, msg):
             sendUtoA = True
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
-            ############### Truck Database ###############
-            # get whid from database
-            #TODO: want packageID??
-            truckReady.whid = getWhid(db, c.truckid)
+            truckReady.packageid = getPackageIDFromTruckid(db, c.truckid)
 
             # update truck status to "arrive warehouse"
             updateTruckStatus(db, c.truckid, "arrive warehouse")
@@ -173,11 +170,9 @@ def UtoA(socW, socA, db, msg):
             seqnumA += 1 
             ############### Packages Database ###############
             #update the current package status
-            pckid=getPackageIDFromTruckid(db,c.truckid)
+            pckid = getPackageIDFromTruckid(db, c.truckid)
             for p in pckid:
-                updatePackageStatus(db,"packing",pckid)
-            
-
+                updatePackageStatus(db, "packing", pckid)          
             
     # receive UDeliveryMade from World
     for d in msg.delivered:
@@ -267,7 +262,7 @@ def AtoU(socW, socA, db, worldid, msg):
 
     
     # receive ADeliver from Amazon
-    if msg.has_delivers().len()!=0:
+    if msg.delivers().len()!=0:
         for deliverCommand in msg.delivers:
             goDeliver = msgUW.deliveries.add()
             goDeliver.truckid = deliverCommand.truckid
