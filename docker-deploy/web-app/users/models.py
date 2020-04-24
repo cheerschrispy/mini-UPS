@@ -8,7 +8,7 @@ class package(models.Model):
 	trackingnum = models.IntegerField()
 	#ownername=models.CharField(max_length=100)
 	owner = models.CharField(max_length=100,verbose_name="owner name",blank=True)
-	whid = models.IntegerField(verbose_name="get picked from which wharehouse")
+	truckid = models.IntegerField(verbose_name="once carried by which truck")
 	detail = models.CharField(max_length=300)
 	x = models.IntegerField()
 	y = models.IntegerField()

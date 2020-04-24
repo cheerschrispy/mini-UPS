@@ -189,9 +189,8 @@ def UtoA(socW, socA, db, msg):
                 seqnumA += 1 
             ############### Packages Database ###############
             #update the current package status
-            pckid = getPackageIDFromTruckid(db, c.truckid)
-            for p in pckid:
-                updatePackageStatus(db, "packing", pckid)          
+            pckid = getPackageIDFromTruckid(db, c.truckid)    
+            updatePackageStatus(db, "packing", pckid)          
             
     # receive UDeliveryMade from World
     for d in msg.delivered:
@@ -284,9 +283,9 @@ def AtoU(socW, socA, db, worldid, msg):
             sendMsg(socA, msgUA)
 
             #print(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y)
-            addPackage(db,detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y)
+            addPackage(db,detail,truckCommand.packageid,goPick.truckid,truckCommand.uAccountName,truckCommand.x,truckCommand.y)
         else:
-            addPackage(db,detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y)
+            addPackage(db,detail,truckCommand.packageid,goPick.truckid,"",truckCommand.x,truckCommand.y)
 
     if hasGetTrucks:
         sendMsg(socW, msgUW)
@@ -295,7 +294,7 @@ def AtoU(socW, socA, db, worldid, msg):
 
         pckid=getPackageIDFromTruckid(db,goPick.truckid)
         #for p in pckid:
-        print(pckid)
+        print("the updating truck is:",pckid)
         updatePackageStatus(db,'truck enroute to wharehouse',pckid)
         
 
@@ -326,8 +325,7 @@ def AtoU(socW, socA, db, worldid, msg):
         
             ############### Packages Database ###############
         pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)
-        for p in pckid:
-            updatePackageStatus(db,"out for deliver",p[0])
+        updatePackageStatus(db,"out for deliver",pckid)
     if hasDeliver:
         sendMsg(socW, msgUW)
     ############### Packages Database ###############
