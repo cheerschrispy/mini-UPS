@@ -33,6 +33,7 @@ if __name__ == '__main__':
     # connect to database
     db = connectDB()
     db.cursor().execute("DELETE FROM users_truck;")
+    db.cursor().execute("DELETE FROM users_package;")
 
     # connect to World server
     #hostW = '0.0.0.0'
