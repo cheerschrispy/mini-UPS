@@ -1,0 +1,20 @@
+Product Differentiation
+
+1. Multi-thread
+In the backend program, we created two threads that listen to World and Amazon simultaneously and respond to their
+messages according. In both threads, we created a new thread to handle a new message, wich improved the scalability
+of the server.
+
+2. Database
+We created a database to store all the infirmation about each package. With this database, we can match each package
+with its delivering truck, owner account and current status. We updated the database in real-time with any messages
+from World or Amazon.
+
+3. Account update
+Users can update their registered email address at any time. This allows users to select their email address flexibly.
+
+4. Email notification
+When a user update the delivery address or when a delivery is made, users will receive a notification email.
+
+5. Communication with Amazon
+When a delivery is made, our UPS server will send a message to Amazon, so that Aamzon can update the status of an order.
