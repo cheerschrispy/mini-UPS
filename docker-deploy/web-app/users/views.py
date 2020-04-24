@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib import messages
 #这里用了继承的form，为了添加新的field
-from .forms import UserRegisterForm,trackingNumInputForm,UpdatePackagesInfoForms
+from .forms import *
 from .models import package
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -25,9 +25,20 @@ def register(request):
 
 @login_required
 def profile(request):
-    #_driver=RequestofDriver.objects.filter(driver = request.user)
-    context={'user':request.user}
-    return render(request, 'users/profile.html',context)
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        if u_form.is_valid():
+            u_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+    context = {
+        'u_form': u_form
+    }
+
+    return render(request, 'users/profile.html', context)
 
 
 

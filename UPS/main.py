@@ -37,8 +37,8 @@ if __name__ == '__main__':
 
     # connect to World server
     #hostW = '0.0.0.0'
-    hostW = 'vcm-14419.vm.duke.edu'
-    #hostW = 'vcm-12360.vm.duke.edu'
+    #hostW = 'vcm-14419.vm.duke.edu'
+    hostW = 'vcm-12360.vm.duke.edu'
     portW = 12345
     socW = buildSoc(hostW, portW)
     
@@ -47,8 +47,8 @@ if __name__ == '__main__':
     print('Connect with world msg1.worldid!')
     
     # connect to Amazon serve
-    #hostA = 'vcm-12360.vm.duke.edu'
-    hostA  = 'vcm-14419.vm.duke.edu'
+    hostA = 'vcm-12360.vm.duke.edu'
+    #hostA  = 'vcm-14419.vm.duke.edu'
     portA = 34567
     socA =  buildSoc(hostA, portA)
     print('Connect with Aamzon!')

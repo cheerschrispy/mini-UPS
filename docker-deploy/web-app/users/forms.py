@@ -20,6 +20,12 @@ class UpdatePackagesInfoForms(forms.Form):
 	new_X = forms.IntegerField()
 	new_Y = forms.IntegerField()
 
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['email']
 
 
 

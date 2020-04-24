@@ -1,6 +1,7 @@
 import socket
 from database import *
 from sendemail import *
+
 import threading
 # google protobuf
 from google.protobuf.internal.decoder import _DecodeVarint32
@@ -199,13 +200,21 @@ def UtoA(socW, socA, db, msg):
     # receive UDeliveryMade from World
     for d in msg.delivered:
         sendUtoW = True
+        sendUtoA = True
         # reply to World with acks
         msgUW.acks.append(d.seqnum)
+        # notyfy the amazon with pckid
+        pckdelivered=msgUA.deliveredpackages.add()
+        pckdelivered.packageid=d.packageid
+        pckdelivered.seqnum=seqnumA
+        mutex=threading.Lock()
+        with mutex:
+            seqnumA += 1 
         # update truck status to "idle"
         updateTruckStatus(db, d.truckid, "idle")
         ############### Packages Database ###############
         updatePackageStatus(db,"delivered",d.packageid)
-        emailAddr=getEmailAddrFromPckid(db.d.packageid)
+        emailAddr=getEmailAddrFromPckid(db,d.packageid)
         if(emailAddr):
             sendEmail(emailAddr)
             
@@ -300,7 +309,7 @@ def AtoU(socW, socA, db, worldid, msg):
 
         pckid=getPackageIDFromTruckid(db,goPick.truckid)
         #for p in pckid:
-        print("the updating truck is:",pckid)
+        print("the updating package is:",pckid)
         updatePackageStatus(db,'truck enroute to wharehouse',pckid)
         
 
