@@ -46,8 +46,8 @@ if __name__ == '__main__':
     print('Connect with world msg1.worldid!')
     
     # connect to Amazon serve
-    hostA = 'vcm-12360.vm.duke.edu'
-    #hostA  = 'vcm-14419.vm.duke.edu'
+    #hostA = 'vcm-12360.vm.duke.edu'
+    hostA  = 'vcm-14419.vm.duke.edu'
     portA = 34567
     socA =  buildSoc(hostA, portA)
     print('Connect with Aamzon!')
@@ -72,5 +72,24 @@ if __name__ == '__main__':
     print('received AGetTruck')
     AtoU(socW, socA, db, msg1.worldid, msg3)
     print('replied with ack and sent UGoPickUp')
-       
+
+    msg4 =recvMsg(socW,"UResponses")
+    UtoA(socW,socA,db,msg4)
+    print("receive ACK from World and completion")
+
+
+    msg6 =recvMsg(socW,"AMessages")
+    AtoU(socW,socA,db, msg1.worldid, msg6)
+    print("receive ACK from Amazon")
+
+    print("receive goDeliver from Amazon")
+    msg7=recvMsg(socA,"AMessages")
+    AtoU(socW, socA, db, msg1.worldid, msg7)
+    print("sent goDeliver to world, reply with ack")
+
+
+
+
+
+
     socW.close()

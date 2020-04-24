@@ -16,11 +16,13 @@ class package(models.Model):
 	#created,truck enroute to wharehouse,packing,out for deliver
 
 	def __str__(self):
-		return self.trackingnum
+		return self.owner
 	#no need to have a return reverse url
 
 class truck(models.Model):
 	status = models.CharField(max_length=100)
 	whid=models.IntegerField(blank=True)
+	
+
 
 

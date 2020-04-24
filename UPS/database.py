@@ -11,7 +11,7 @@ def addTruck(db, i):
     cursor.execute(sql, [i])
     db.commit()
 
-def updateTruckStatus(db, truckid, status, whid = -1):
+def updateTruckStatus(db, truckid, status, whid=-1):
     cursor = db.cursor()
     sql1 = "UPDATE users_truck SET status = %s WHERE id = %s;"
     cursor.execute(sql1, (status, truckid))
@@ -58,13 +58,12 @@ def updatePackageStatus(db,status,packageid):
 def getPackageIDFromTruckid(db,truckid):
     cursor = db.cursor()
     whid=getWhid(db,truckid)
+    print("whid is ",whid)
     #get current on-way package id
     sql = "SELECT trackingnum FROM users_package WHERE whid = %s AND status!='out for deliver' AND status!='delivered';"
     cursor.execute(sql,[whid])
     res = cursor.fetchall()
     if res:
-        for a in res:
-            print (a[0])
         return res
     else:
         print("Cannot get the correct pacakgeid!")

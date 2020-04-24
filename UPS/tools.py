@@ -20,7 +20,9 @@ amazonAckStatus=[]
 
 # send a message by socket
 def sendMsg(socket, msg):
-    print("send:", msg)
+    print("------------")
+    print("sendMsg:", msg)
+   
     msgstr = msg.SerializeToString()
     _EncodeVarint(socket.send, len(msgstr), None)
     socket.send(msgstr)
@@ -48,7 +50,9 @@ def recvMsg(socket, msgType):
     else:
         print("Receive an undefined message.")
         return
+    print("------------")
     print("recv:", msg)
+    
     return msg
 
 # build a socket with World
@@ -170,7 +174,8 @@ def UtoA(socW, socA, db, msg):
 
         # send UtoACommands to Amazon
         # if the truck status is 'arrive warehouse'
-        if c.status == 'arrive warehouse':
+        if c.status == 'ARRIVE WAREHOUSE':
+            print("enter arrive wrhouse if")
             sendUtoA = True
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
@@ -254,70 +259,77 @@ def AtoU(socW, socA, db, worldid, msg):
         goPick.whid = truckCommand.whid
         ############### Truck Database ###############
         # update truck status to "travelling"
-        updateTruckStatus(db, truckCommand.truckid, "travelling", truckCommand.whid)
+        updateTruckStatus(db, goPick.truckid, "travelling", truckCommand.whid)
         goPick.seqnum = seqnumW
         with mutex:
             seqnumW += 1
             ############### Packages Database ###############
             #make details in each packages
-        detail=""
+        detail="yige"
         for product in truckCommand.product:
-            info=product.count+" X "+product.description+" ,productID is "+product.productid+"\n"
+            #info=product.count+" X "+product.description+" ,productID is "+product.productid+"\n"
+            info=product.description
             detail+=info
             #insert new entry in pakage
-        if(truckCommand.uAccountName != None):
-            msgUA = AMessages()
+        if(truckCommand.uAccountName != ""):
+            print(truckCommand.uAccountName)
+            msgUA = ua.UMessages()
             msgUA.accountResult.packageid = truckCommand.packageid
             msgUA.accountResult.uAccountExists = validateUserName(db, truckCommand.uAccountName)
             msgUA.accountResult.uAccountName = truckCommand.uAccountName
-            msgUA.accountResult.uAccountid = truckCommand.uAccountid
+            msgUA.accountResult.uAccountid = 0
             msgUA.accountResult.seqnum = seqnumA
             with mutex:
                 seqnumA += 1
-                sendMsg(socA, msgUA)
-                addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y))
+            sendMsg(socA, msgUA)
+
+            #print(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y)
+            addPackage(db,detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y)
         else:
-            addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y))
+            addPackage(db,detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y)
 
     if hasGetTrucks:
         sendMsg(socW, msgUW)
         ############### Packages Database ###############
         #TODO: if receive ACK from world.(gettruck),should change status to on-way
-        pckid=getPackageIDFromTruckid(goPick.truckid)
-        for p in pckid:
-            updatePackageStatus(db,'truck enroute to wharehouse',p[0])
+
+        pckid=getPackageIDFromTruckid(db,goPick.truckid)
+        #for p in pckid:
+        print(pckid)
+        updatePackageStatus(db,'truck enroute to wharehouse',pckid)
+        
 
 
     
     # receive ADeliver from Amazon
     ##### TODO
-    if False:
-    #######    #####
-        for deliverCommand in msg.delivers:
-            goDeliver = msgUW.deliveries.add()
-            goDeliver.truckid = deliverCommand.truckid
-            # update truck status to "delivering"
-            updateTruckStatus(db, goDeliver.truckid, "delivering")
-            goDeliver.seqnum = seqnumW
-            with mutex:
-                seqnumW += 1
+    hasDeliver=False
+    for deliverCommand in msg.delivers:
+        hasDeliver=True
+        goDeliver = msgUW.deliveries.add()
+        goDeliver.truckid = deliverCommand.truckid
+        # update truck status to "delivering"
+        updateTruckStatus(db, goDeliver.truckid, "delivering")
+        goDeliver.seqnum = seqnumW
+        with mutex:
+            seqnumW += 1
             
-            # generate a subtype UDeliveryLocation
-            for location in deliverCommand.location:
-                currLocation = goDeliver.packages.add()
-                ############### Packages Database ###############
-                #need to use x, y in database
-                currLocation.packageid = location.packageid
-                xy=getXY(db,currLocation.packageid)
-                currLocation.x=xy[0]
-                currLocation.y=xy[1]
+        # generate a subtype UDeliveryLocation
+        for location in deliverCommand.location:
+            currLocation = goDeliver.packages.add()
+            ############### Packages Database ###############
+            #need to use x, y in database
+            currLocation.packageid = location.packageid
+            xy=getXY(db,currLocation.packageid)
+            currLocation.x=xy[0]
+            currLocation.y=xy[1]
         
             ############### Packages Database ###############
-            pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)
-            for p in pckid:
-                updatePackageStatus(db,"out for deliver",p[0])
-            
-    sendMsg(socW, msgUW)
+        pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)
+        for p in pckid:
+            updatePackageStatus(db,"out for deliver",p[0])
+    if hasDeliver:
+        sendMsg(socW, msgUW)
     ############### Packages Database ###############
     ##TODO：if receive the world's ACK, update to"out for deliver"
 
