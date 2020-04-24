@@ -8,7 +8,7 @@ def connectDB():
 def addTruck(db, i):
     cursor = db.cursor()
     sql = "INSERT INTO users_truck VALUES (%s, 'idle', -1);"
-    cursor.execute(sql, i)
+    cursor.execute(sql, [i])
     db.commit()
 
 def updateTruckStatus(db, truckid, status, whid = -1):

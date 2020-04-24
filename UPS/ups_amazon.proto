@@ -53,8 +53,8 @@ message UTruckReady {
 
 message ADeliver {
     required int32 truckid = 1;
-    required int64 seqnum = 3; 
-    required int64 worldid = 4;
+    required int64 seqnum = 2; 
+    required int64 worldid = 3;
 }
 
 

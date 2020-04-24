@@ -11,17 +11,19 @@ from google.protobuf.internal.decoder import _DecodeVarint32
 from google.protobuf.internal.encoder import _EncodeVarint
 
 ################################################
-def recvWorld(socW, socA):
+def recvWorld(socW, socA, db):
     while True:
+        print('wwwwwwwwwwwwwwwwwwwww')
         msg = recvMsg(socW, "UResponses")
-        t = threading.Thread(target = UtoA, args = (socW, socA, msg))
+        t = threading.Thread(target = UtoA, args = (socW, socA, db, msg))
         t.start()
         t.join()
 
-def recvAmazon(socW, socA, worldid):
+def recvAmazon(socW, socA, db, worldid):
     while True:
+        print('aaaaaaaaaaaaaaaaaaaa')
         msg = recvMsg(socA, "AMessages")
-        t = threading.Thread(target = AtoU, args = (socW, socA,worldid,msg))
+        t = threading.Thread(target = AtoU, args = (socW, socA, db, worldid,msg))
         t.start()
         t.join()
         
@@ -30,25 +32,45 @@ def recvAmazon(socW, socA, worldid):
 if __name__ == '__main__':
     # connect to database
     db = connectDB()
+    db.cursor().execute("DELETE FROM users_truck;")
 
     # connect to World server
-    hostW = '0.0.0.0'
+    #hostW = '0.0.0.0'
+    hostW = 'vcm-14419.vm.duke.edu'
+    #hostW = 'vcm-12360.vm.duke.edu'
     portW = 12345
     socW = buildSoc(hostW, portW)
-
+    
     # create a World
     msg1 = createWorld(socW,db)
+    print('Connect with world msg1.worldid!')
     
     # connect to Amazon serve
     hostA = 'vcm-12360.vm.duke.edu'
+    #hostA  = 'vcm-14419.vm.duke.edu'
     portA = 34567
     socA =  buildSoc(hostA, portA)
-    
-    threadW = threading.Thread(target = recvWorld, args = (socW, socA))
-    threadA = threading.Thread(target = recvAmazon, args = (socW, socA, msg1.worldid))
+    print('Connect with Aamzon!')
+
+    '''
+    threadW = threading.Thread(target = recvWorld, args = (socW, socA, db))
+    threadA = threading.Thread(target = recvAmazon, args = (socW, socA, db, msg1.worldid))
     threadW.start()
     threadA.start()
     threadW.join()
     threadA.join()
+    '''
+    sendWorldid(socA, msg1.worldid)
+    print('sent worldid to Amazon')
     
+    msg2 = recvMsg(socA, "AMessages")
+    AtoU(socW, socA, db, msg1.worldid, msg2)
+    print('received ack for UInitialWorldid')
+        
+    ####
+    msg3 = recvMsg(socA, "AMessages")
+    print('received AGetTruck')
+    AtoU(socW, socA, db, msg1.worldid, msg3)
+    print('replied with ack and sent UGoPickUp')
+       
     socW.close()

@@ -20,6 +20,7 @@ amazonAckStatus=[]
 
 # send a message by socket
 def sendMsg(socket, msg):
+    print("send:", msg)
     msgstr = msg.SerializeToString()
     _EncodeVarint(socket.send, len(msgstr), None)
     socket.send(msgstr)
@@ -47,6 +48,7 @@ def recvMsg(socket, msgType):
     else:
         print("Receive an undefined message.")
         return
+    print("recv:", msg)
     return msg
 
 # build a socket with World
@@ -60,7 +62,7 @@ def buildSoc(host, port):
 def createWorld(socket,db):
     msgUW = wu.UConnect()
     msgUW.isAmazon = False
-    for i in range(1000):
+    for i in range(10):
         truck = msgUW.trucks.add()
         truck.id = i
         truck.x = 100
@@ -108,10 +110,21 @@ def disconnectWorld(socket, worldid):
 # send worldid to Amazon
 def sendWorldid(socket, worldid):
     global seqnumA
-    msgUA = ua.UtoACommands()
-    msgUA.connectWorld.seqnum = seqnumA
-    seqnumA += 1
-    msgUA.connectWorld.worldid.append(worldid)
+    # receive AInitialWorld from Amazon
+    msg = recvMsg(socket, "AMessages")
+    print('received AInitialWorldid from Amazon')
+    print("msg: ", msg)    
+
+    msgACK = ua.UMessages()
+    msgACK.acks.append(msg.initialWorldid.seqnum)
+    sendMsg(socket, msgACK)
+    print('replied ack = ', msg.initialWorldid.seqnum)
+
+    msgUA = ua.UMessages()
+    msgUA.initialWorldid.worldid.append(worldid)
+    msgUA.initialWorldid.seqnum = seqnumA
+    with mutex:
+        seqnumA += 1
         
     sendMsg(socket, msgUA)
 
@@ -211,24 +224,20 @@ def AtoU(socW, socA, db, worldid, msg):
     # prepare UMessages to Amazon
     msgUA = ua.UMessages()
     sendUtoA=False
-    # receive AInitialWorld from Amazon
-    if msg.has_initialWorldid():
-        sendUtoA = True
-        msgUA.initialWorldid.worldid = worldid
-        msgUA.initialWorldid.seqnum = seqnumA
-        with mutex:
-            seqnumA += 1
         
     # reply to Amazon with acks
     for truckCommand in msg.getTrucks:
+        print('2222')
         sendUtoA = True
         msgUA.acks.append(truckCommand.seqnum)
 
     for deliverCommand in msg.delivers:
+        print('3333')
         sendUtoA = True
         msgUA.acks.append(deliverCommand.seqnum)
 
     if sendUtoA:
+        print('4444')
         sendMsg(socA, msgUA)
 
 
@@ -236,37 +245,41 @@ def AtoU(socW, socA, db, worldid, msg):
     msgUW = wu.UCommands()
     
     # receive AGetTruck from Amazon
-    if msg.getTrucks().len()!=0:
-        for truckCommand in msg.getTrucks:
-            goPick = msgUW.pickups.add()
-            goPick.truckid = findIdleTruck(db)
-            goPick.whid = truckCommand.whid
-            ############### Truck Database ###############
-            # update truck status to "travelling"
-            updateTruckStatus(db, truckCommand.truckid, "travelling", truckCommand.whid)
-            goPick.seqnum = seqnumW
-            with mutex:
-                seqnumW += 1
+    hasGetTrucks = False
+    for truckCommand in msg.getTrucks:
+        hasGetTrucks = True
+        print('6666')
+        goPick = msgUW.pickups.add()
+        goPick.truckid = findIdleTruck(db)
+        goPick.whid = truckCommand.whid
+        ############### Truck Database ###############
+        # update truck status to "travelling"
+        updateTruckStatus(db, truckCommand.truckid, "travelling", truckCommand.whid)
+        goPick.seqnum = seqnumW
+        with mutex:
+            seqnumW += 1
             ############### Packages Database ###############
             #make details in each packages
-            detail=""
-            for product in truckCommand.product:
-                info=product.count+" X "+product.description+" ,productID is "+product.productid+"\n"
-                detail+=info
+        detail=""
+        for product in truckCommand.product:
+            info=product.count+" X "+product.description+" ,productID is "+product.productid+"\n"
+            detail+=info
             #insert new entry in pakage
-            if(truckCommand.uAccountName.len()!=0):
-                msgUA = AMessages()
-                msgUA.accountResult.packageid = truckCommand.packageid
-                msgUA.accountResult.uAccountExists = validateUserName(db, truckCommand.uAccountName)
-                msgUA.accountResult.uAccountName = truckCommand.uAccountName
-                msgUA.accountResult.uAccountid = truckCommand.uAccountid
-                msgUA.accountResult.seqnum = seqnumA
-                with mutex:
-                    seqnumA += 1
+        if(truckCommand.uAccountName != None):
+            msgUA = AMessages()
+            msgUA.accountResult.packageid = truckCommand.packageid
+            msgUA.accountResult.uAccountExists = validateUserName(db, truckCommand.uAccountName)
+            msgUA.accountResult.uAccountName = truckCommand.uAccountName
+            msgUA.accountResult.uAccountid = truckCommand.uAccountid
+            msgUA.accountResult.seqnum = seqnumA
+            with mutex:
+                seqnumA += 1
                 sendMsg(socA, msgUA)
                 addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,truckCommand.uAccountName,truckCommand.x,truckCommand.y))
-            else:
-                addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y))
+        else:
+            addPackage(db,(detail,truckCommand.packageid,truckCommand.whid,"",truckCommand.x,truckCommand.y))
+
+    if hasGetTrucks:
         sendMsg(socW, msgUW)
         ############### Packages Database ###############
         #TODO: if receive ACK from world.(gettruck),should change status to on-way
@@ -277,7 +290,9 @@ def AtoU(socW, socA, db, worldid, msg):
 
     
     # receive ADeliver from Amazon
-    if msg.delivers().len()!=0:
+    ##### TODO
+    if False:
+    #######    #####
         for deliverCommand in msg.delivers:
             goDeliver = msgUW.deliveries.add()
             goDeliver.truckid = deliverCommand.truckid
