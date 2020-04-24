@@ -88,8 +88,27 @@ def validateUserName(db, name):
         return True
     else:
         return False
+def getUsername(db,trackingnum):
+    cursor = db.cursor()
+    sql="SELECT owner FROM users_package WHERE trackingnum=%s;"
+    cursor.execute(sql, [trackingnum])
+    res = cursor.fetchall()
+    if res:
+        return res[0][0]
+    else:
+        return ""
 
 
+def getEmailAddrFromPckid(db,trackingnum):
+    cursor = db.cursor()
+    username=getUsername(db,trackingnum)
+    sql="SELECT email FROM auth_user WHERE username=%s;"
+    cursor.execute(sql, (username,))
+    res = cursor.fetchall()
+    if res:
+        return res[0][0]
+    else:
+        return None
 
 
 

@@ -1,5 +1,6 @@
 import psycopg2
 from database import *
+from sendemail import *
 
 def  makestr(x):
     string=""
@@ -22,8 +23,13 @@ if __name__ == '__main__':
 
     print(getXY(db,12345))'''
     #addPackage(db,"apple",123,2,"zeyu",12,12)
-    makestr(1)
-
+    #makestr(1)
+    a=getEmailAddrFromPckid(db,12)
+    if(a):
+        print("exist")
+        sendEmail(a)
+    else:
+        print("not exist")
 
 
 

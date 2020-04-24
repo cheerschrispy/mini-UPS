@@ -1,5 +1,6 @@
 import socket
 from database import *
+from sendemail import *
 import threading
 # google protobuf
 from google.protobuf.internal.decoder import _DecodeVarint32
@@ -204,7 +205,9 @@ def UtoA(socW, socA, db, msg):
         updateTruckStatus(db, d.truckid, "idle")
         ############### Packages Database ###############
         updatePackageStatus(db,"delivered",d.packageid)
-
+        emailAddr=getEmailAddrFromPckid(db.d.packageid)
+        if(emailAddr):
+            sendEmail(emailAddr)
             
 
     if sendUtoW:

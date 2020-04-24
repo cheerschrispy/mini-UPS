@@ -83,7 +83,7 @@ def updateInfo (request, package_id):
             current.y = _Y
             current.save()
             messages.success(request, f'Your account has been updated!')
-            '''
+            
             send_mail(
             'Package Information Updated',
             'You have updated your destination successfully',
@@ -91,7 +91,7 @@ def updateInfo (request, package_id):
             [request.user.email],
             fail_silently=False,
 
-    )'''
+    )
             return redirect('viewOwnOrder')
     else:
         p_form = UpdatePackagesInfoForms()
