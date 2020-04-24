@@ -20,8 +20,9 @@ amazonAckStatus=[]
 
 # send a message by socket
 def sendMsg(socket, msg):
-    print("------------")
-    print("sendMsg:", msg)
+    print("============")
+    print("send:", msg)
+    print("============")
    
     msgstr = msg.SerializeToString()
     _EncodeVarint(socket.send, len(msgstr), None)
@@ -52,6 +53,7 @@ def recvMsg(socket, msgType):
         return
     print("------------")
     print("recv:", msg)
+    print("------------")
     
     return msg
 
