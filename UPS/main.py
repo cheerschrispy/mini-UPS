@@ -35,8 +35,8 @@ if __name__ == '__main__':
     db.cursor().execute("DELETE FROM users_truck;")
 
     # connect to World server
-    #hostW = '0.0.0.0'
-    hostW = 'vcm-14419.vm.duke.edu'
+    hostW = '0.0.0.0'
+    #hostW = 'vcm-14419.vm.duke.edu'
     #hostW = 'vcm-12360.vm.duke.edu'
     portW = 12345
     socW = buildSoc(hostW, portW)
@@ -46,23 +46,25 @@ if __name__ == '__main__':
     print('Connect with world msg1.worldid!')
     
     # connect to Amazon serve
-    #hostA = 'vcm-12360.vm.duke.edu'
-    hostA  = 'vcm-14419.vm.duke.edu'
+    hostA = 'vcm-12360.vm.duke.edu'
+    #hostA  = 'vcm-14419.vm.duke.edu'
     portA = 34567
     socA =  buildSoc(hostA, portA)
     print('Connect with Aamzon!')
 
-    '''
+    sendWorldid(socA, msg1.worldid)
+    print('sent worldid to Amazon')
+    
     threadW = threading.Thread(target = recvWorld, args = (socW, socA, db))
     threadA = threading.Thread(target = recvAmazon, args = (socW, socA, db, msg1.worldid))
     threadW.start()
     threadA.start()
     threadW.join()
     threadA.join()
-    '''
-    sendWorldid(socA, msg1.worldid)
-    print('sent worldid to Amazon')
     
+
+
+    '''
     msg2 = recvMsg(socA, "AMessages")
     AtoU(socW, socA, db, msg1.worldid, msg2)
     print('received ack for UInitialWorldid')
@@ -86,7 +88,7 @@ if __name__ == '__main__':
     msg7=recvMsg(socA,"AMessages")
     AtoU(socW, socA, db, msg1.worldid, msg7)
     print("sent goDeliver to world, reply with ack")
-
+    '''
 
 
 
