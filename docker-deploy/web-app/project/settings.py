@@ -124,7 +124,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'roles'
+LOGIN_REDIRECT_URL = 'viewOwnOrder'
 LOGIN_URL = 'login'
 
 

@@ -7,6 +7,7 @@ from .models import package
 from django.db.models import Q
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import (ListView,DetailView,CreateView,UpdateView,DeleteView)
+from django.core.mail import send_mail
 
 
 def register(request):
@@ -54,8 +55,8 @@ def trackPackage(request):
 @login_required
 def viewOwnOrder(request):
     context = {
-        'posts': package.objects.filter(Q(owner=request.user.username),Q(status="packing")|Q(status="packed")|Q(status="loading")|Q(status="loaded")) ,
-        'unposts': package.objects.filter(Q(owner=request.user.username),Q(status="delivering")|Q(status="delivered"))
+        'posts': package.objects.filter(Q(owner=request.user.username),Q(status="created")|Q(status="packed")|Q(status="loading")|Q(status="loaded")) ,
+        'unposts': package.objects.filter(Q(owner=request.user.username),Q(status="out for deliver")|Q(status="delivered"))
     }
     return render(request, 'users/allPackages.html', context)
 
@@ -82,6 +83,14 @@ def updateInfo (request, package_id):
             current.y = _Y
             current.save()
             messages.success(request, f'Your account has been updated!')
+            '''
+            send_mail(
+            'Package Information Updated',
+            'You have updated your destination successfully',
+            'UPS Services',
+            [request.user.email],
+            fail_silently=False,
+    )'''
             return redirect('viewOwnOrder')
     else:
         p_form = UpdatePackagesInfoForms()

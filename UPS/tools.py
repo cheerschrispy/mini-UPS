@@ -182,6 +182,7 @@ def UtoA(socW, socA, db, msg):
             truckReady = msgUA.truckReadies.add()
             truckReady.truckid = c.truckid
             truckReady.packageid = getPackageIDFromTruckid(db, c.truckid)
+            print("find mapping pckid is :",truckReady.packageid )
 
             # update truck status to "arrive warehouse"
             updateTruckStatus(db, c.truckid, "arrive warehouse")
@@ -316,14 +317,14 @@ def AtoU(socW, socA, db, worldid, msg):
             seqnumW += 1
             
         # generate a subtype UDeliveryLocation
-        for location in deliverCommand.location:
-            currLocation = goDeliver.packages.add()
-            ############### Packages Database ###############
-            #need to use x, y in database
-            currLocation.packageid = location.packageid
-            xy=getXY(db,currLocation.packageid)
-            currLocation.x=xy[0]
-            currLocation.y=xy[1]
+        #for location in deliverCommand.location:
+        currLocation = goDeliver.packages.add()
+        ############### Packages Database ###############
+        #need to use x, y in database
+        currLocation.packageid = getPackageIDFromTruckid(db,goDeliver.truckid)
+        xy=getXY(db,currLocation.packageid)
+        currLocation.x=xy[0]
+        currLocation.y=xy[1]
         
             ############### Packages Database ###############
         pckid=getPackageIDFromTruckid(db,deliverCommand.truckid)

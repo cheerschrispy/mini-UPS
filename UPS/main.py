@@ -35,9 +35,9 @@ if __name__ == '__main__':
     db.cursor().execute("DELETE FROM users_truck;")
 
     # connect to World server
-    hostW = '0.0.0.0'
+    #hostW = '0.0.0.0'
     #hostW = 'vcm-14419.vm.duke.edu'
-    #hostW = 'vcm-12360.vm.duke.edu'
+    hostW = 'vcm-12360.vm.duke.edu'
     portW = 12345
     socW = buildSoc(hostW, portW)
     

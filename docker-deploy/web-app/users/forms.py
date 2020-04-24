@@ -4,15 +4,14 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class UserRegisterForm(UserCreationForm):
-    #email = forms.EmailField()
+    email = forms.EmailField()
     #userID=forms.CharField()
     class Meta:
         model = User
-        fields = ['username','password1', 'password2']
+        fields = ['username','email','password1', 'password2']
         
 class trackingNumInputForm(forms.Form):
     trackingNumber=forms.CharField(max_length=100)
-
 
 
 class UpdatePackagesInfoForms(forms.Form):
@@ -20,5 +19,7 @@ class UpdatePackagesInfoForms(forms.Form):
 	#trackingNum = forms.CharField(max_length=100)
 	new_X = forms.IntegerField()
 	new_Y = forms.IntegerField()
+
+
 
 
