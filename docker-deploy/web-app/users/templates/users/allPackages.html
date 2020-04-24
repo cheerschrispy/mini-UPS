@@ -8,20 +8,20 @@
        <table border="2" width="100%" align = "center">
    <tr>
      <td width="10%" align = "center">Action</td>
-     <td width="10%" align = "center">Package Detail</td>
-     <td width="30%" align = "center">Order Number</td>
-     <td width="30%" align = "center">Position X</td>
-       <td width="20%" align = "center">Position Y</td>
+     <td width="30%" align = "center">Package Detail</td>
+     <td width="10%" align = "center">Order Number</td>
+     <td width="10%" align = "center">Position X</td>
+       <td width="10%" align = "center">Position Y</td>
        <td width="10%" align = "center">Status</td>
       
    </tr>
   Undelivered Packages
      {% for posts in posts %}<tr>
         <td width="10%" align = "center"><a href ="{% url 'update' posts.id %}">Edit</a ></td>
-    <td width="10%" align = "center">{{ posts.detail }}</td>
-    <td width="30%" align = "center">{{ posts.trackingnum }}</td>
-    <td width="30%" align = "center">{{ posts.x}}</td>
-  <td width="20%" align = "center">{{ posts.y }}</td>
+    <td width="30%" align = "center">{{ posts.detail }}</td>
+    <td width="10%" align = "center">{{ posts.trackingnum }}</td>
+    <td width="10%" align = "center">{{ posts.x}}</td>
+  <td width="10%" align = "center">{{ posts.y }}</td>
     <td width="10%" align = "center">{{ posts.status }}</td>
 
     
@@ -36,20 +36,20 @@
        <table border="2" width="100%" align = "center">
    <tr>
    
-    <td width="10%" align = "center">Package Detail</td>
-    <td width="30%" align = "center">Order Number</td>
-    <td width="30%" align = "center">Position X</td>
-      <td width="20%" align = "center">Position Y</td>
+    <td width="30%" align = "center">Package Detail</td>
+    <td width="10%" align = "center">Order Number</td>
+    <td width="10%" align = "center">Position X</td>
+      <td width="10%" align = "center">Position Y</td>
       <td width="10%" align = "center">Status</td>
        
    </tr>
    Delivered Packages
      {% for posts in unposts %}<tr>
         
-      <td width="10%" align = "center">{{ posts.detail }}</td>
-      <td width="30%" align = "center">{{ posts.trackingnum }}</td>
-      <td width="30%" align = "center">{{ posts.x }}</td>
-    <td width="20%" align = "center">{{ posts.y }}</td>
+      <td width="30%" align = "center">{{ posts.detail }}</td>
+      <td width="10%" align = "center">{{ posts.trackingnum }}</td>
+      <td width="10%" align = "center">{{ posts.x }}</td>
+    <td width="10%" align = "center">{{ posts.y }}</td>
       <td width="10%" align = "center">{{ posts.status }}</td>
   
    

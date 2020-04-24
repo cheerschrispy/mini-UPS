@@ -267,10 +267,10 @@ def AtoU(socW, socA, db, worldid, msg):
             seqnumW += 1
             ############### Packages Database ###############
             #make details in each packages
-        detail="yige"
+        detail=""
         for product in truckCommand.product:
-            #info=product.count+" X "+product.description+" ,productID is "+product.productid+"\n"
-            info=product.description
+            info=str(product.count)+" X "+product.description+"\n";#+" ,productID is "+str(product.productid)+"------\n"
+            #info=product.description
             detail+=info
             #insert new entry in pakage
         if(truckCommand.uAccountName != ""):

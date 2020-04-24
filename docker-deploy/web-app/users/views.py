@@ -55,7 +55,7 @@ def trackPackage(request):
 @login_required
 def viewOwnOrder(request):
     context = {
-        'posts': package.objects.filter(Q(owner=request.user.username),Q(status="created")|Q(status="packed")|Q(status="loading")|Q(status="loaded")) ,
+        'posts': package.objects.filter(Q(owner=request.user.username),Q(status="created")|Q(status="packing")|Q(status="truck enroute to wharehouse")) ,
         'unposts': package.objects.filter(Q(owner=request.user.username),Q(status="out for deliver")|Q(status="delivered"))
     }
     return render(request, 'users/allPackages.html', context)
@@ -90,6 +90,7 @@ def updateInfo (request, package_id):
             'UPS Services',
             [request.user.email],
             fail_silently=False,
+
     )'''
             return redirect('viewOwnOrder')
     else:
