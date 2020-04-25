@@ -1,0 +1,52 @@
+Danger Log
+
+4.13
+We got an error when we tried to import the compiled protocol file to main.py.
+We found that the error was caused by the discrepency of the version of protoc
+and protobuf. So we updated the version of protoc to match protobuf and solved
+this error.
+
+4.14
+Due to the potential flakiness in World, we should implement a timeout mechanism
+to resend a message without receive ack in a certain time.
+
+4.16
+We set up a table of truck in database to store the status of each truck, so that
+we could assgin an idle truck when receive a new package request. However, when
+all trucks were not idle, we had to assign a truck in other status. This situation
+should be handled later.
+
+4.17
+We added a unique sequence number to each message we sent to keep track of it.
+We set up a table of package to store the information of each package. In this way,
+users can search the status of a package with its tracking number. Also, users can
+see all their packages that they ordered in their account.
+
+4.19
+We added a lock when increasing the sequence number to ensure it unique.
+We optimized the attibutes of the package table so that we can get all the
+essential information in the simplest way.
+
+4.20
+We found it hard to tell whether an optional field existed. We tried to find a
+corresponding in-built function, but none of them worked. Hence, we adjust the
+logic of our code to avoid this issue.
+
+4.21
+If Amazon sent us a request with a UPS account that did not exist, we should
+store the package to the database without an owner.
+
+4.22
+Our design was to deliver the package the address that defined in ADeliver. In
+order to realize the functionality of redirecting a package before it is delivered,
+we decided to update the protocol to receive the related information in AGetTruck,
+so that the delivery address could be recorded immediately when the order was
+created.
+
+4.23
+We implemented multi-thread to listen to World and Amazon simultaneously.
+We also created a thread per request to handle the messages we received.
+
+4.24
+We set up the docker, so that our website and server could run with a "sudo
+docker-compose up" command.
