@@ -30,5 +30,13 @@ services:
        - ./nginx/config:/etc/nginx/conf.d
      depends_on:
        - web
+  ups:
+     build: ./UPS
+     command: /code/runserver.sh
+     volumes:
+       - ./UPS:/code
+     expose:
+       - "12345"
+       - "34567"
 volumes:
    data-volume: 
